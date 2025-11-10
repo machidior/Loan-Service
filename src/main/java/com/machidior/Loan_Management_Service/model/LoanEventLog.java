@@ -23,7 +23,7 @@ public class LoanEventLog {
     private LocalDateTime createdAt;
     private String createdBy;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "loan_application_id")
-    private LoanApplication loanApplication;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "loan_application_id")
+//    private LoanApplication loanApplication;
 }

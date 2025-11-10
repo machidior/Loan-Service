@@ -1,29 +1,31 @@
 package com.machidior.Loan_Management_Service.model;
 
-import com.machidior.Loan_Management_Service.enums.LoanProductType;
 import com.machidior.Loan_Management_Service.enums.LoanStatus;
 import com.machidior.Loan_Management_Service.enums.RepaymentFrequency;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
-@Table(name = "loan_applications")
+@Table(name = "executive_loan")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LoanApplication {
-
+public class ExecutiveLoan {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "loan_id_generator")
+    @GenericGenerator(
+            name = "loan_id_generator",
+            strategy = "com.machidior.Loan_Management_Service.generator.ExecutiveLoanIdGenerator"
+    )
+    private String id;
 
     @Column(unique = true, nullable = false)
     private String applicationNumber;
@@ -31,9 +33,6 @@ public class LoanApplication {
     @Column(nullable = false)
     private String customerId; // Reference from customer-service
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private LoanProductType loanProductType;
 
     @Column(nullable = false)
     private BigDecimal amountRequested;
@@ -61,12 +60,12 @@ public class LoanApplication {
     private LocalDateTime updatedAt;
 
     // Relationships
-    @OneToMany(mappedBy = "loanApplication", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Guarantor> guarantors;
-
-    @OneToMany(mappedBy = "loanApplication", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Collateral> collaterals;
-
-    @OneToMany(mappedBy = "loanApplication", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RepaymentSchedule> repaymentSchedules;
+//    @OneToMany(mappedBy = "loanApplication", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Guarantor> guarantors;
+//
+//    @OneToMany(mappedBy = "loanApplication", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Collateral> collaterals;
+//
+//    @OneToMany(mappedBy = "loanApplication", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<RepaymentSchedule> repaymentSchedules;
 }

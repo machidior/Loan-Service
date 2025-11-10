@@ -33,7 +33,5 @@ public class RepaymentSchedule {
     @Enumerated(EnumType.STRING)
     private RepaymentStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "loan_application_id")
-    private LoanApplication loanApplication;
+
 }

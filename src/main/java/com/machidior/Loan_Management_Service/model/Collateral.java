@@ -23,7 +23,7 @@ public class Collateral {
     private String document;      // e.g. scanned document reference
     private BigDecimal valuation;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "loan_application_id")
-    private LoanApplication loanApplication;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "loan_application_id")
+//    private LoanApplication loanApplication;
 }

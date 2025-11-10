@@ -8,5 +8,4 @@ import java.util.List;
 
 @Repository
 public interface GuarantorRepository extends JpaRepository<Guarantor, Long> {
-    List<Guarantor> findByLoanApplicationId(Long loanApplicationId);
 }

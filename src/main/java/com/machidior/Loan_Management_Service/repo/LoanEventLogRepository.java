@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface LoanEventLogRepository extends JpaRepository<LoanEventLog, Long> {
-    List<LoanEventLog> findByLoanApplicationIdOrderByCreatedAtDesc(Long loanApplicationId);
+    //List<LoanEventLog> findByLoanApplicationIdOrderByCreatedAtDesc(Long loanApplicationId);
 }

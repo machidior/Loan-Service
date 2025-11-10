@@ -25,7 +25,7 @@ public class Guarantor {
 
     private boolean approved;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "loan_application_id")
-    private LoanApplication loanApplication;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "loan_application_id")
+//    private LoanApplication loanApplication;
 }
