@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "business_loan")
@@ -59,42 +60,21 @@ public class BusinessLoan {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    private String bankStatement;
-    private String insuranceComprehensiveCover;
-    private String businessLicense;
-    private String tinCertificate;
-    private String tinNumber;
-    private String brelaCertificate;
 
     private BigDecimal applicationFee;
     private BigDecimal loanInsuranceFee;
     private BigDecimal totalPayableAmount;
 
-    /**
-     *
-     private String approvedBy;
-     private LocalDateTime approvedAt;
+    @OneToMany(mappedBy = "businessLoan", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BusinessDetails> businessDetails;
 
-     private String rejectedBy;
-     private LocalDateTime rejectedAt;
+     @OneToOne(mappedBy = "businessLoan", cascade = CascadeType.ALL, orphanRemoval = true)
+     private BusinessLoanGuarantor guarantor;
 
-     private String disbursedBy;
-     private LocalDateTime disbursedAt;
-        private String closedBy;
-     private LocalDateTime closedAt;
-     private String cancelledBy;
-     private LocalDateTime cancelledAt;
-     private LocalDateTime expectedDisbursementDate;
+     @OneToMany(mappedBy = "businessLoan", cascade = CascadeType.ALL, orphanRemoval = true)
+     private List<BusinessLoanCollateral> collaterals;
 
-     Relationships
-     @OneToMany(mappedBy = "loanApplication", cascade = CascadeType.ALL, orphanRemoval = true)
-     private List<Guarantor> guarantors;
-
-     @OneToMany(mappedBy = "loanApplication", cascade = CascadeType.ALL, orphanRemoval = true)
-     private List<Collateral> collaterals;
-
-     @OneToMany(mappedBy = "loanApplication", cascade = CascadeType.ALL, orphanRemoval = true)
-     private List<RepaymentSchedule> repaymentSchedules;
-     */
+    // @OneToMany(mappedBy = "loanApplication", cascade = CascadeType.ALL, orphanRemoval = true)
+  //   private List<RepaymentSchedule> repaymentSchedules;
 
 }

@@ -1,42 +1,57 @@
 package com.machidior.Loan_Management_Service.mapper;
 
-import com.machidior.Loan_Management_Service.dtos.BusinessLoanRequest;
-import com.machidior.Loan_Management_Service.dtos.BusinessLoanResponse;
+import com.machidior.Loan_Management_Service.dtos.*;
 import com.machidior.Loan_Management_Service.enums.LoanStatus;
-import com.machidior.Loan_Management_Service.model.BusinessLoan;
+import com.machidior.Loan_Management_Service.model.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
+@RequiredArgsConstructor
 public class BusinessLoanMapper {
 
-    public BusinessLoan toEntity(BusinessLoanRequest request) {
-        if (request == null) return null;
+    private final BusinessLoanCollateralMapper collateralMapper;
+    private final BusinessLoanGuarantorMapper guarantorMapper;
 
-        return BusinessLoan.builder()
+    public BusinessLoan toEntity(BusinessLoanRequest request) {
+        BusinessLoan loan = BusinessLoan.builder()
                 .customerId(request.getCustomerId())
                 .amountRequested(request.getAmountRequested())
-                .amountApproved(request.getAmountApproved())
                 .interestRate(request.getInterestRate())
                 .termMonths(request.getTermMonths())
                 .repaymentFrequency(request.getRepaymentFrequency())
                 .purpose(request.getPurpose())
                 .loanOfficerId(request.getLoanOfficerId())
                 .remarks(request.getRemarks())
-
-                .bankStatement(request.getBankStatement())
-                .insuranceComprehensiveCover(request.getInsuranceComprehensiveCover())
-                .businessLicense(request.getBusinessLicense())
-                .tinCertificate(request.getTinCertificate())
-                .tinNumber(request.getTinNumber())
-                .brelaCertificate(request.getBrelaCertificate())
-
                 .status(LoanStatus.PENDING)
                 .build();
+
+        if (request.getBusinessDetails() != null) {
+            request.getBusinessDetails().forEach(detail -> detail.setBusinessLoan(loan));
+            loan.setBusinessDetails(request.getBusinessDetails());
+        }
+
+
+        if (request.getCollaterals() != null) {
+            List<BusinessLoanCollateral> collaterals = request.getCollaterals()
+                    .stream()
+                    .map(req -> collateralMapper.toEntity(req, loan))
+                    .collect(Collectors.toList());
+            loan.setCollaterals(collaterals);
+        }
+
+        if (request.getGuarantor() != null) {
+            BusinessLoanGuarantor guarantor = guarantorMapper.toEntity(request.getGuarantor(), loan);
+            loan.setGuarantor(guarantor);
+        }
+
+        return loan;
     }
 
     public BusinessLoanResponse toResponse(BusinessLoan loan) {
-        if (loan == null) return null;
-
         return BusinessLoanResponse.builder()
                 .id(loan.getId())
                 .applicationNumber(loan.getApplicationNumber())
@@ -50,16 +65,20 @@ public class BusinessLoanMapper {
                 .status(loan.getStatus())
                 .loanOfficerId(loan.getLoanOfficerId())
                 .remarks(loan.getRemarks())
-
-                .bankStatement(loan.getBankStatement())
-                .insuranceComprehensiveCover(loan.getInsuranceComprehensiveCover())
-                .businessLicense(loan.getBusinessLicense())
-                .tinCertificate(loan.getTinCertificate())
-                .tinNumber(loan.getTinNumber())
-                .brelaCertificate(loan.getBrelaCertificate())
-
+                .applicationFee(loan.getApplicationFee())
+                .loanInsuranceFee(loan.getLoanInsuranceFee())
+                .totalPayableAmount(loan.getTotalPayableAmount())
                 .createdAt(loan.getCreatedAt())
                 .updatedAt(loan.getUpdatedAt())
+                .businessDetails(loan.getBusinessDetails())
+                .collaterals(loan.getCollaterals() != null
+                        ? loan.getCollaterals().stream()
+                        .map(collateralMapper::toResponse)
+                        .collect(Collectors.toList())
+                        : null)
+                .guarantor(loan.getGuarantor() != null
+                        ? guarantorMapper.toResponse(loan.getGuarantor())
+                        : null)
                 .build();
     }
 }

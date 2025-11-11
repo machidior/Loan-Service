@@ -1,9 +1,11 @@
 package com.machidior.Loan_Management_Service.dtos;
 
 import com.machidior.Loan_Management_Service.enums.RepaymentFrequency;
+import com.machidior.Loan_Management_Service.model.BusinessDetails;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,7 +16,6 @@ public class BusinessLoanRequest {
 
     private String customerId;
     private BigDecimal amountRequested;
-    private BigDecimal amountApproved;
     private BigDecimal interestRate;
     private Integer termMonths;
     private RepaymentFrequency repaymentFrequency;
@@ -22,10 +23,7 @@ public class BusinessLoanRequest {
     private String loanOfficerId;
     private String remarks;
 
-    private String bankStatement;
-    private String insuranceComprehensiveCover;
-    private String businessLicense;
-    private String tinCertificate;
-    private String tinNumber;
-    private String brelaCertificate;
+    private List<BusinessDetails> businessDetails;
+    private List<BusinessLoanCollateralRequest> collaterals;
+    private BusinessLoanGuarantorRequest guarantor;
 }

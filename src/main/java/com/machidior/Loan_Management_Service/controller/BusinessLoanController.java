@@ -2,6 +2,7 @@ package com.machidior.Loan_Management_Service.controller;
 
 import com.machidior.Loan_Management_Service.dtos.BusinessLoanRequest;
 import com.machidior.Loan_Management_Service.dtos.BusinessLoanResponse;
+import com.machidior.Loan_Management_Service.dtos.LoanApprovalRequest;
 import com.machidior.Loan_Management_Service.service.BusinessLoanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,15 +32,20 @@ public class BusinessLoanController {
         return ResponseEntity.ok(businessLoanService.getBusinessLoanByApplicationNumber(applicationNumber));
     }
 
+    @PostMapping("/{id}/approve")
+    public ResponseEntity<BusinessLoanResponse> approveLoan(@PathVariable String id, @RequestBody LoanApprovalRequest request) {
+        return ResponseEntity.ok(businessLoanService.approveBusinessLoan(id, request));
+    }
+
     @GetMapping
     public ResponseEntity<List<BusinessLoanResponse>> getAll() {
         return ResponseEntity.ok(businessLoanService.getAllBusinessLoans());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<BusinessLoanResponse> update(@PathVariable String id, @RequestBody BusinessLoanRequest request) {
-        return ResponseEntity.ok(businessLoanService.updateBusinessLoan(id, request));
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<BusinessLoanResponse> update(@PathVariable String id, @RequestBody BusinessLoanRequest request) {
+//        return ResponseEntity.ok(businessLoanService.updateBusinessLoan(id, request));
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {

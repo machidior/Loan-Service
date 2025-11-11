@@ -4,30 +4,22 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "loan_approvals")
+@Table(name = "loan_rejections")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LoanApproval {
-
+public class LoanRejection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "loan_id")
     private String loanId;
-    private String approvedBy;
+    private String rejectedBy;
     @CreationTimestamp
-    private LocalDateTime approvedAt;
-
-    private BigDecimal approvedAmount;
-    private BigDecimal interestRate;
-
-    private String comments;
-
+    private LocalDateTime rejectedAt;
+    private String rejectionReason;
 }

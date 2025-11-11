@@ -1,33 +1,20 @@
-package com.machidior.Loan_Management_Service.model;
+package com.machidior.Loan_Management_Service.dtos;
 
-import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "loan_approvals")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LoanApproval {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class LoanApprovalResponse {
     private Long id;
-    @Column(name = "loan_id")
     private String loanId;
     private String approvedBy;
-    @CreationTimestamp
     private LocalDateTime approvedAt;
-
     private BigDecimal approvedAmount;
     private BigDecimal interestRate;
-
     private String comments;
-
 }

@@ -8,4 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface LoanApprovalRepository extends JpaRepository<LoanApproval, Long> {
+    //Optional<LoanApproval> findByApplicationNumber(String applicationNumber);
+    Optional<LoanApproval> findByLoanId(String loanId);
+
 }

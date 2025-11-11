@@ -1,0 +1,43 @@
+package com.machidior.Loan_Management_Service.model;
+
+import com.machidior.Loan_Management_Service.enums.CollateralPurchaseCondition;
+import com.machidior.Loan_Management_Service.enums.CollateralType;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "collaterals")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class BusinessLoanCollateral {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String CustomerId;
+    @Enumerated(EnumType.STRING)
+    private CollateralType type;
+    private String name;
+    private String description;
+    private String location;
+    @Enumerated(EnumType.STRING)
+    private CollateralPurchaseCondition purchaseCondition;
+    private String photo;
+    private LocalDate purchaseDate;
+    private Integer quantity;
+    @Column(name = "purchasing_value")
+    private BigDecimal purchasingValue;
+    @Column(name = "estimated_value")
+    private BigDecimal estimatedValue;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "loan_application_id")
+    private BusinessLoan businessLoan;
+}

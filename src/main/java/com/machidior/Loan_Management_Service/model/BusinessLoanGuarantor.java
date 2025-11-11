@@ -1,7 +1,10 @@
 package com.machidior.Loan_Management_Service.model;
 
+import com.machidior.Loan_Management_Service.enums.Gender;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "guarantors")
@@ -10,7 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Guarantor {
+public class   BusinessLoanGuarantor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,12 +23,18 @@ public class Guarantor {
     private String relationship;
     private String phoneNumber;
     private String nationalId;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+    private String email;
+    private String occupation;
+    private String age;
     private String address;
-    private String document;//scanned ID or signature file (String for now)
+    private String guarantee;
+    private BigDecimal GuaranteeValue;
 
     private boolean approved;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "loan_application_id")
-//    private LoanApplication loanApplication;
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "loan_application_id")
+    private BusinessLoan businessLoan;
 }

@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 public class LoanApprovalRequest {
-    private String approvedBy;
     private BigDecimal approvedAmount;
     private BigDecimal interestRate;
     private String comments;

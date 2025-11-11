@@ -2,15 +2,18 @@ package com.machidior.Loan_Management_Service.service;
 
 import com.machidior.Loan_Management_Service.dtos.BusinessLoanRequest;
 import com.machidior.Loan_Management_Service.dtos.BusinessLoanResponse;
+import com.machidior.Loan_Management_Service.dtos.LoanApprovalRequest;
 import com.machidior.Loan_Management_Service.enums.LoanProductType;
 import com.machidior.Loan_Management_Service.enums.LoanStatus;
 import com.machidior.Loan_Management_Service.exception.ResourceNotFoundException;
 import com.machidior.Loan_Management_Service.generator.ApplicationNumberGenerator;
 import com.machidior.Loan_Management_Service.mapper.BusinessLoanMapper;
 import com.machidior.Loan_Management_Service.model.BusinessLoan;
+import com.machidior.Loan_Management_Service.model.LoanApproval;
 import com.machidior.Loan_Management_Service.model.LoanProductCharges;
 import com.machidior.Loan_Management_Service.model.LoanProductTerms;
 import com.machidior.Loan_Management_Service.repo.BusinessLoanRepository;
+import com.machidior.Loan_Management_Service.repo.LoanApprovalRepository;
 import com.machidior.Loan_Management_Service.repo.LoanProductChargesRepository;
 import com.machidior.Loan_Management_Service.repo.LoanProductTermsRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +34,7 @@ public class BusinessLoanService  {
     private final BusinessLoanMapper businessLoanMapper;
     private final LoanProductTermsRepository loanProductTermsRepository;
     private final LoanProductChargesRepository loanProductChargesRepository;
+    private final LoanApprovalRepository loanApprovalRepository;
     @Autowired
     private ApplicationNumberGenerator applicationNumberGenerator;
 
@@ -85,6 +89,7 @@ public class BusinessLoanService  {
         loan.setLoanInsuranceFee(loanInsurance);
         loan.setTotalPayableAmount(totalPayable);
         loan.setStatus(LoanStatus.PENDING);
+        loan.setAmountApproved(null);
 
         String appNumber = applicationNumberGenerator.generateApplicationNumber();
         loan.setApplicationNumber(appNumber);
@@ -98,6 +103,24 @@ public class BusinessLoanService  {
         return businessLoanRepository.findAll()
                 .stream()
                 .noneMatch(loan -> loan.getCustomerId().equals(customerId));
+    }
+
+    public BusinessLoanResponse approveBusinessLoan(String id, LoanApprovalRequest request) {
+        BusinessLoan loan = businessLoanRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Business Loan not found with id: " + id));
+
+        LoanApproval approval = new LoanApproval();
+        approval.setApprovedAmount(request.getApprovedAmount());
+        approval.setComments(request.getComments());
+        approval.setInterestRate(request.getInterestRate());
+        approval.setLoanId(loan.getId());
+        approval.setApprovedBy("manager");
+        loanApprovalRepository.save(approval);
+
+        loan.setAmountApproved(request.getApprovedAmount());
+        loan.setStatus(LoanStatus.APPROVED);
+        BusinessLoan updated = businessLoanRepository.save(loan);
+        return businessLoanMapper.toResponse(updated);
     }
 
     public BusinessLoanResponse getBusinessLoanById(String id) {
@@ -119,28 +142,29 @@ public class BusinessLoanService  {
                 .toList();
     }
 
-    public BusinessLoanResponse updateBusinessLoan(String id, BusinessLoanRequest request) {
-        BusinessLoan existing = businessLoanRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Business Loan not found with id: " + id));
-
-        existing.setAmountApproved(request.getAmountApproved());
-        existing.setInterestRate(request.getInterestRate());
-        existing.setTermMonths(request.getTermMonths());
-        existing.setRepaymentFrequency(request.getRepaymentFrequency());
-        existing.setPurpose(request.getPurpose());
-        existing.setLoanOfficerId(request.getLoanOfficerId());
-        existing.setRemarks(request.getRemarks());
-
-        existing.setBankStatement(request.getBankStatement());
-        existing.setInsuranceComprehensiveCover(request.getInsuranceComprehensiveCover());
-        existing.setBusinessLicense(request.getBusinessLicense());
-        existing.setTinCertificate(request.getTinCertificate());
-        existing.setTinNumber(request.getTinNumber());
-        existing.setBrelaCertificate(request.getBrelaCertificate());
-
-        BusinessLoan updated = businessLoanRepository.save(existing);
-        return businessLoanMapper.toResponse(updated);
-    }
+    /**
+     * public BusinessLoanResponse updateBusinessLoan(String id, BusinessLoanRequest request) {
+     *         BusinessLoan existing = businessLoanRepository.findById(id)
+     *                 .orElseThrow(() -> new ResourceNotFoundException("Business Loan not found with id: " + id));
+     *
+     *         existing.setAmountApproved(request.getAmountApproved());
+     *         existing.setInterestRate(request.getInterestRate());
+     *         existing.setTermMonths(request.getTermMonths());
+     *         existing.setRepaymentFrequency(request.getRepaymentFrequency());
+     *         existing.setPurpose(request.getPurpose());
+     *         existing.setLoanOfficerId(request.getLoanOfficerId());
+     *         existing.setRemarks(request.getRemarks());
+     *
+     *         existing.setBankStatement(request.getBankStatement());
+     *         existing.setInsuranceComprehensiveCover(request.getInsuranceComprehensiveCover());
+     *         existing.setBusinessLicense(request.getBusinessLicense());
+     *         existing.setTinCertificate(request.getTinCertificate());
+     *         existing.setTinNumber(request.getTinNumber());
+     *         existing.setBrelaCertificate(request.getBrelaCertificate());
+     *
+     *         BusinessLoan updated = businessLoanRepository.save(existing);
+     *         return businessLoanMapper.toResponse(updated);
+     *     }*/
 
     public void deleteBusinessLoan(String id) {
         if (!businessLoanRepository.existsById(id)) {
