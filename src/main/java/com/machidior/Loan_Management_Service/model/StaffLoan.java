@@ -20,9 +20,9 @@ import java.time.LocalDateTime;
 @Builder
 public class StaffLoan{
     @Id
-    @GeneratedValue(generator = "loan_id_generator")
+    @GeneratedValue(generator = "staff_loan_id_generator")
     @GenericGenerator(
-            name = "loan_id_generator",
+            name = "staff_loan_id_generator",
             strategy = "com.machidior.Loan_Management_Service.generator.StaffLoanIdGenerator"
     )
     private String id;

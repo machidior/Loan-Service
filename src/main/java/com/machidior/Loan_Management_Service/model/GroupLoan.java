@@ -16,9 +16,9 @@ import org.hibernate.annotations.GenericGenerator;
 public class GroupLoan {
 
     @Id
-    @GeneratedValue(generator = "loan_id_generator")
+    @GeneratedValue(generator = "group_loan_id_generator")
     @GenericGenerator(
-            name = "loan_id_generator",
+            name = "group_loan_id_generator",
             strategy = "com.machidior.Loan_Management_Service.generator.GroupLoanIdGenerator"
     )
     private String id;

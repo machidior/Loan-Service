@@ -2,6 +2,7 @@ package com.machidior.Loan_Management_Service.mapper;
 
 import com.machidior.Loan_Management_Service.dtos.BusinessLoanCollateralRequest;
 import com.machidior.Loan_Management_Service.dtos.BusinessLoanCollateralResponse;
+import com.machidior.Loan_Management_Service.enums.CollateralCondition;
 import com.machidior.Loan_Management_Service.enums.CollateralPurchaseCondition;
 import com.machidior.Loan_Management_Service.enums.CollateralType;
 import com.machidior.Loan_Management_Service.model.BusinessLoan;
@@ -19,6 +20,7 @@ public class BusinessLoanCollateralMapper {
                 .description(request.getDescription())
                 .location(request.getLocation())
                 .purchaseCondition(parsePurchaseCondition(request.getPurchaseCondition()))
+                .condition(parseCollateralCondition(request.getCondition()))
                 .photo(request.getPhoto())
                 .purchaseDate(request.getPurchaseDate())
                 .quantity(request.getQuantity())
@@ -37,6 +39,7 @@ public class BusinessLoanCollateralMapper {
                 .description(collateral.getDescription())
                 .location(collateral.getLocation())
                 .purchaseCondition(collateral.getPurchaseCondition())
+                .condition(collateral.getCondition())
                 .photo(collateral.getPhoto())
                 .purchaseDate(collateral.getPurchaseDate())
                 .quantity(collateral.getQuantity())
@@ -61,6 +64,14 @@ public class BusinessLoanCollateralMapper {
             return condition != null ? CollateralPurchaseCondition.valueOf(condition.toUpperCase()) : null;
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Invalid purchase condition: " + condition);
+        }
+    }
+
+    private CollateralCondition parseCollateralCondition(String condition) {
+        try {
+            return condition != null ? CollateralCondition.valueOf(condition.toUpperCase()) : null;
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid collateral condition: " + condition);
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.machidior.Loan_Management_Service.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,5 +29,6 @@ public class BusinessDetails {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "business_loan_id", referencedColumnName = "id")
+    @JsonIgnore
     private BusinessLoan businessLoan;
 }

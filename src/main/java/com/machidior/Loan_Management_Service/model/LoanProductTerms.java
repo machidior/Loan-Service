@@ -28,8 +28,11 @@ public class LoanProductTerms {
     @Column(name = "max_amount")
     private BigDecimal maxAmount;
 
-    @Column(name = "payment_term")
-    private String paymentTerm;
+    @Column(name = "maximum_payment_term")
+    private String maximumPaymentTerm;
+
+    @Column(name = "total_interest_rate")
+    private BigDecimal totalInterestRate;
 
     @Column(name = "interest_rate")
     private BigDecimal interestRate;

@@ -1,5 +1,6 @@
 package com.machidior.Loan_Management_Service.model;
 
+import com.machidior.Loan_Management_Service.enums.CollateralCondition;
 import com.machidior.Loan_Management_Service.enums.CollateralPurchaseCondition;
 import com.machidior.Loan_Management_Service.enums.CollateralType;
 import jakarta.persistence.*;
@@ -30,6 +31,8 @@ public class BusinessLoanCollateral {
     @Enumerated(EnumType.STRING)
     private CollateralPurchaseCondition purchaseCondition;
     private String photo;
+    @Enumerated(EnumType.STRING)
+    private CollateralCondition condition;
     private LocalDate purchaseDate;
     private Integer quantity;
     @Column(name = "purchasing_value")

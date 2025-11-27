@@ -1,5 +1,6 @@
 package com.machidior.Loan_Management_Service.dtos;
 
+import com.machidior.Loan_Management_Service.enums.CollateralCondition;
 import com.machidior.Loan_Management_Service.enums.CollateralPurchaseCondition;
 import com.machidior.Loan_Management_Service.enums.CollateralType;
 import lombok.*;
@@ -21,6 +22,7 @@ public class BusinessLoanCollateralResponse {
     private String description;
     private String location;
     private CollateralPurchaseCondition purchaseCondition;
+    private CollateralCondition condition;
     private String photo;
     private LocalDate purchaseDate;
     private Integer quantity;

@@ -21,9 +21,9 @@ import java.util.List;
 @Builder
 public class BusinessLoan {
     @Id
-    @GeneratedValue(generator = "loan_id_generator")
+    @GeneratedValue(generator = "business_loan_id_generator")
     @GenericGenerator(
-            name = "loan_id_generator",
+            name = "business_loan_id_generator",
             strategy = "com.machidior.Loan_Management_Service.generator.BusinessLoanIdGenerator"
     )
     @Column(length = 20)

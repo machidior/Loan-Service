@@ -1,6 +1,7 @@
 package com.machidior.Loan_Management_Service.dtos;
 
 
+import com.machidior.Loan_Management_Service.enums.CollateralCondition;
 import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ public class BusinessLoanCollateralRequest {
     private String description;
     private String location;
     private String purchaseCondition;
+    private String condition;
     private String photo;
     private LocalDate purchaseDate;
     private Integer quantity;
