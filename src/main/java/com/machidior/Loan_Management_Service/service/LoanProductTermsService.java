@@ -28,9 +28,8 @@ public class LoanProductTermsService {
 
         existing.setMinAmount(updatedTerms.getMinAmount());
         existing.setMaxAmount(updatedTerms.getMaxAmount());
-        existing.setInterestRate(updatedTerms.getInterestRate());
-        existing.setPaymentTerm(updatedTerms.getPaymentTerm());
-        existing.setRepaymentDurationMonths(updatedTerms.getRepaymentDurationMonths());
+        existing.setMonthlyInterestRate(updatedTerms.getMonthlyInterestRate());
+        existing.setMaximumTermMonths(updatedTerms.getMaximumTermMonths());
         existing.setExtraRules(updatedTerms.getExtraRules());
         existing.setMinGroupMembers(updatedTerms.getMinGroupMembers());
         existing.setMaxGroupMembers(updatedTerms.getMaxGroupMembers());

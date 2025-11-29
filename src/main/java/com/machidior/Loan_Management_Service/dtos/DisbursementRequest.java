@@ -2,12 +2,15 @@ package com.machidior.Loan_Management_Service.dtos;
 
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class DisbursementRequest {
-    private String disbursedBy;
+    private String loanId;
     private String accountNumber;
-    private String disbursementMode; //  CASH, BANK_TRANSFER, MOBILE_MONEY
+    private String disbursementMethod;
+    private LocalDate disbursementDate;
 }

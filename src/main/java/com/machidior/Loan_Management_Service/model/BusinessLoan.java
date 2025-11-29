@@ -41,7 +41,7 @@ public class BusinessLoan {
     private BigDecimal amountApproved;
     private BigDecimal interestRate;
 
-    private Integer termMonths;
+    private Integer paymentDuration;
 
     @Enumerated(EnumType.STRING)
     private RepaymentFrequency repaymentFrequency;
@@ -59,6 +59,9 @@ public class BusinessLoan {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @Column(name = "loan_fees")
+    private BigDecimal loanFees;
 
 
     private BigDecimal applicationFee;

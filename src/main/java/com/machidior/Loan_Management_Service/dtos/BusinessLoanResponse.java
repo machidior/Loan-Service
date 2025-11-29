@@ -23,7 +23,7 @@ public class BusinessLoanResponse {
     private BigDecimal amountRequested;
     private BigDecimal amountApproved;
     private BigDecimal interestRate;
-    private Integer termMonths;
+    private Integer paymentDuration;
     private RepaymentFrequency repaymentFrequency;
     private String purpose;
 

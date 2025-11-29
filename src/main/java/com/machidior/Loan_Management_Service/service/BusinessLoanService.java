@@ -37,6 +37,7 @@ public class BusinessLoanService  {
     private final LoanApprovalRepository loanApprovalRepository;
     @Autowired
     private ApplicationNumberGenerator applicationNumberGenerator;
+    private final LoanCalculationService calculator;
 
 
     public BusinessLoanResponse createBusinessLoan(BusinessLoanRequest request) {
@@ -57,11 +58,11 @@ public class BusinessLoanService  {
                     terms.getMinAmount() + " - " + terms.getMaxAmount());
         }
 
-        if (!terms.getRepaymentDurationMonths().equals(request.getTermMonths())) {
-            throw new IllegalArgumentException("Repayment duration must be " + terms.getRepaymentDurationMonths() + " months");
+        if (request.getPaymentDuration()>terms.getMaximumTermMonths()) {
+            throw new IllegalArgumentException("Repayment duration must not exceed " + terms.getMaximumTermMonths() + " months");
         }
 
-        BigDecimal interestRate = terms.getInterestRate();
+        BigDecimal interestRate = terms.getMonthlyInterestRate();
 
 
          boolean isFirstLoan = isFirstLoanForCustomer(request.getCustomerId());
@@ -75,25 +76,34 @@ public class BusinessLoanService  {
 
         BigDecimal totalInterest = requestedAmount
                 .multiply(interestRate)
+                .multiply(BigDecimal.valueOf(request.getPaymentDuration()))
                 .divide(BigDecimal.valueOf(100),2, RoundingMode.HALF_UP);
-
-        BigDecimal totalPayable = requestedAmount
-                .add(totalInterest)
-                .add(applicationFee)
-                .add(loanInsurance);
 
         BusinessLoan loan = businessLoanMapper.toEntity(request);
 
         loan.setInterestRate(interestRate);
         loan.setApplicationFee(applicationFee);
         loan.setLoanInsuranceFee(loanInsurance);
-        loan.setTotalPayableAmount(totalPayable);
         loan.setStatus(LoanStatus.PENDING);
         loan.setAmountApproved(null);
+
+
+
+        if ((request.getPaymentDuration() == 1)) {
+            loan.setLoanFees(calculator.calculateLoanFee(terms.getTotalInterestRatePerMonth(), interestRate));
+        } else {
+            loan.setLoanFees(calculator.calculateLoanFee(terms.getTotalInterestPer2Month(), interestRate.add(interestRate))
+                    .divide(BigDecimal.valueOf(2),2,RoundingMode.HALF_UP));
+        }
 
         String appNumber = applicationNumberGenerator.generateApplicationNumber();
         loan.setApplicationNumber(appNumber);
 
+        BigDecimal totalPayable = requestedAmount
+                .add(totalInterest)
+                .add(applicationFee)
+                .add(loanInsurance);
+        loan.setTotalPayableAmount(totalPayable);
 
         BusinessLoan saved = businessLoanRepository.save(loan);
         return businessLoanMapper.toResponse(saved);

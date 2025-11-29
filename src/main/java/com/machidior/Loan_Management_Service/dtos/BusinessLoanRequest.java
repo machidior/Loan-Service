@@ -17,7 +17,7 @@ public class BusinessLoanRequest {
     private String customerId;
     private BigDecimal amountRequested;
     private BigDecimal interestRate;
-    private Integer termMonths;
+    private Integer paymentDuration;
     private RepaymentFrequency repaymentFrequency;
     private String purpose;
     private String loanOfficerId;

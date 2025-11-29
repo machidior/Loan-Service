@@ -49,7 +49,7 @@ public class SalaryLoanService {
         LoanProductCharges charges = chargesRepository.findByProductType(LoanProductType.SALARY_PRODUCT)
                 .orElseThrow(() -> new IllegalArgumentException("Charges not defined for Salary Product"));
 
-        BigDecimal interestRate = terms.getInterestRate();
+        BigDecimal interestRate = terms.getMonthlyInterestRate();
 
         BigDecimal insurance = requestedAmount
                 .multiply(charges.getLoanInsurancePercent()

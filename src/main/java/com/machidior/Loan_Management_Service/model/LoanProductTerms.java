@@ -28,17 +28,17 @@ public class LoanProductTerms {
     @Column(name = "max_amount")
     private BigDecimal maxAmount;
 
-    @Column(name = "maximum_payment_term")
-    private String maximumPaymentTerm;
+    @Column(name = "maximum_term_months")
+    private Integer maximumTermMonths;
 
     @Column(name = "total_interest_rate")
-    private BigDecimal totalInterestRate;
+    private BigDecimal totalInterestRatePerMonth;
+
+    @Column(name = "total_interest_rate_2month")
+    private BigDecimal totalInterestPer2Month;
 
     @Column(name = "interest_rate")
-    private BigDecimal interestRate;
-
-    @Column(name = "repayment_duration_months")
-    private Integer repaymentDurationMonths;
+    private BigDecimal monthlyInterestRate;
 
     @Column(name = "min_group_members", nullable=true)
     private Integer minGroupMembers;
