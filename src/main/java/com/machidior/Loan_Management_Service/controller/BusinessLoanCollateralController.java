@@ -24,12 +24,12 @@ public class BusinessLoanCollateralController {
         return ResponseEntity.ok(collateralService.addCollateral(loanId, request));
     }
 
-    @GetMapping
-    public ResponseEntity<List<BusinessLoanCollateralResponse>> getCollaterals(
-            @PathVariable String loanId
-    ) {
-        return ResponseEntity.ok(collateralService.getAllCollaterals(loanId));
-    }
+//    @GetMapping
+//    public ResponseEntity<List<BusinessLoanCollateralResponse>> getCollaterals(
+//            @PathVariable String loanId
+//    ) {
+//        return ResponseEntity.ok(collateralService.getAllCollaterals(loanId));
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCollateral(@PathVariable Long id) {

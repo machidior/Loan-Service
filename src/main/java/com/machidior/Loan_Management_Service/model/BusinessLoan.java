@@ -1,7 +1,8 @@
 package com.machidior.Loan_Management_Service.model;
 
+import com.machidior.Loan_Management_Service.enums.InstallmentFrequency;
+import com.machidior.Loan_Management_Service.enums.LoanProductType;
 import com.machidior.Loan_Management_Service.enums.LoanStatus;
-import com.machidior.Loan_Management_Service.enums.RepaymentFrequency;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -28,56 +29,23 @@ public class BusinessLoan {
     )
     @Column(length = 20)
     private String id;
-
-    @Column(unique = true, nullable = false)
     private String applicationNumber;
-
-    @Column(nullable = false)
-    private String customerId; // Reference from customer-service
-
-    @Column(nullable = false)
-    private BigDecimal amountRequested;
-
-    private BigDecimal amountApproved;
-    private BigDecimal interestRate;
-
-    private Integer paymentDuration;
-
     @Enumerated(EnumType.STRING)
-    private RepaymentFrequency repaymentFrequency;
-
-    private String purpose;
-
+    private LoanProductType productType;
+    private String customerId;
+    private BigDecimal principal;
+    private BigDecimal interestRate;
+    private BigDecimal loanFeeRate;
+    @Enumerated(EnumType.STRING)
+    private InstallmentFrequency installmentFrequency;
     @Enumerated(EnumType.STRING)
     private LoanStatus status;
-
-    private String loanOfficerId;
-    private String remarks;
+    private BigDecimal totalPayableAmount;
+    private Integer termMonths;
+    private String loanContract;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
-
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-    @Column(name = "loan_fees")
-    private BigDecimal loanFees;
-
-
-    private BigDecimal applicationFee;
-    private BigDecimal loanInsuranceFee;
-    private BigDecimal totalPayableAmount;
-
-    @OneToMany(mappedBy = "businessLoan", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BusinessDetails> businessDetails;
-
-     @OneToOne(mappedBy = "businessLoan", cascade = CascadeType.ALL, orphanRemoval = true)
-     private BusinessLoanGuarantor guarantor;
-
-     @OneToMany(mappedBy = "businessLoan", cascade = CascadeType.ALL, orphanRemoval = true)
-     private List<BusinessLoanCollateral> collaterals;
-
-    // @OneToMany(mappedBy = "loanApplication", cascade = CascadeType.ALL, orphanRemoval = true)
-  //   private List<RepaymentSchedule> repaymentSchedules;
-
 }

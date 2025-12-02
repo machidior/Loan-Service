@@ -4,6 +4,7 @@ import com.machidior.Loan_Management_Service.dtos.BusinessLoanGuarantorRequest;
 import com.machidior.Loan_Management_Service.dtos.BusinessLoanGuarantorResponse;
 import com.machidior.Loan_Management_Service.enums.Gender;
 import com.machidior.Loan_Management_Service.model.BusinessLoan;
+import com.machidior.Loan_Management_Service.model.BusinessLoanApplication;
 import com.machidior.Loan_Management_Service.model.BusinessLoanGuarantor;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class BusinessLoanGuarantorMapper {
 
 
-    public BusinessLoanGuarantor toEntity(BusinessLoanGuarantorRequest request, BusinessLoan businessLoan) {
+    public BusinessLoanGuarantor toEntity(BusinessLoanGuarantorRequest request, BusinessLoanApplication businessLoan) {
         return BusinessLoanGuarantor.builder()
                 .name(request.getName())
                 .relationship(request.getRelationship())
@@ -24,8 +25,8 @@ public class BusinessLoanGuarantorMapper {
                 .address(request.getAddress())
                 .guarantee(request.getGuarantee())
                 .GuaranteeValue(request.getGuaranteeValue())
-                .approved(false) // default: false when creating
-                .businessLoan(businessLoan)
+                .approved(false)
+                .businessLoanApplication(businessLoan)
                 .build();
     }
 
@@ -46,8 +47,8 @@ public class BusinessLoanGuarantorMapper {
                 .GuaranteeValue(guarantor.getGuaranteeValue())
                 .approved(guarantor.isApproved())
                 .businessLoanId(
-                        guarantor.getBusinessLoan() != null
-                                ? guarantor.getBusinessLoan().getId()
+                        guarantor.getBusinessLoanApplication() != null
+                                ? guarantor.getBusinessLoanApplication().getApplicationNumber()
                                 : null
                 )
                 .build();

@@ -41,6 +41,6 @@ public class BusinessLoanCollateral {
     private BigDecimal estimatedValue;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "loan_application_id")
-    private BusinessLoan businessLoan;
+    @JoinColumn(name = "loan_application_number")
+    private BusinessLoanApplication businessLoanApplication;
 }

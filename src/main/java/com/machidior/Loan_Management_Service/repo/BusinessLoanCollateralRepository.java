@@ -8,5 +8,4 @@ import java.util.List;
 
 @Repository
 public interface BusinessLoanCollateralRepository extends JpaRepository<BusinessLoanCollateral, Long> {
-    List<BusinessLoanCollateral> findByBusinessLoanId(String loanId);
 }

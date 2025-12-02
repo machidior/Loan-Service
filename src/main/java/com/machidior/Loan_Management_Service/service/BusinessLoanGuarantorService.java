@@ -4,7 +4,9 @@ import com.machidior.Loan_Management_Service.dtos.BusinessLoanGuarantorRequest;
 import com.machidior.Loan_Management_Service.dtos.BusinessLoanGuarantorResponse;
 import com.machidior.Loan_Management_Service.mapper.BusinessLoanGuarantorMapper;
 import com.machidior.Loan_Management_Service.model.BusinessLoan;
+import com.machidior.Loan_Management_Service.model.BusinessLoanApplication;
 import com.machidior.Loan_Management_Service.model.BusinessLoanGuarantor;
+import com.machidior.Loan_Management_Service.repo.BusinessLoanApplicationRepository;
 import com.machidior.Loan_Management_Service.repo.BusinessLoanGuarantorRepository;
 import com.machidior.Loan_Management_Service.repo.BusinessLoanRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,12 +22,12 @@ import java.util.stream.Collectors;
 @Transactional
 public class BusinessLoanGuarantorService {
 
-    private final BusinessLoanRepository businessLoanRepository;
+    private final BusinessLoanApplicationRepository businessLoanApplicationRepository;
     private final BusinessLoanGuarantorRepository guarantorRepository;
     private final BusinessLoanGuarantorMapper guarantorMapper;
 
     public BusinessLoanGuarantorResponse addGuarantor(String loanId, BusinessLoanGuarantorRequest request) {
-        BusinessLoan loan = businessLoanRepository.findById(loanId)
+        BusinessLoanApplication loan = businessLoanApplicationRepository.findById(loanId)
                 .orElseThrow(() -> new EntityNotFoundException("Business loan not found with id: " + loanId));
 
         BusinessLoanGuarantor guarantor = guarantorMapper.toEntity(request, loan);
@@ -34,10 +36,10 @@ public class BusinessLoanGuarantorService {
         return guarantorMapper.toResponse(guarantor);
     }
 
-    public List<BusinessLoanGuarantorResponse> getAllGuarantors(String loanId) {
-        List<BusinessLoanGuarantor> guarantors = guarantorRepository.findByBusinessLoanId(loanId);
-        return guarantors.stream().map(guarantorMapper::toResponse).collect(Collectors.toList());
-    }
+//    public List<BusinessLoanGuarantorResponse> getAllGuarantors(String loanId) {
+//        List<BusinessLoanGuarantor> guarantors = guarantorRepository.findByBusinessLoanId(loanId);
+//        return guarantors.stream().map(guarantorMapper::toResponse).collect(Collectors.toList());
+//    }
 
     public BusinessLoanGuarantorResponse approveGuarantor(Long guarantorId) {
         BusinessLoanGuarantor guarantor = guarantorRepository.findById(guarantorId)

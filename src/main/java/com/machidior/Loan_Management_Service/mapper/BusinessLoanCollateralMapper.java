@@ -6,6 +6,7 @@ import com.machidior.Loan_Management_Service.enums.CollateralCondition;
 import com.machidior.Loan_Management_Service.enums.CollateralPurchaseCondition;
 import com.machidior.Loan_Management_Service.enums.CollateralType;
 import com.machidior.Loan_Management_Service.model.BusinessLoan;
+import com.machidior.Loan_Management_Service.model.BusinessLoanApplication;
 import com.machidior.Loan_Management_Service.model.BusinessLoanCollateral;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class BusinessLoanCollateralMapper {
 
 
-    public BusinessLoanCollateral toEntity(BusinessLoanCollateralRequest request, BusinessLoan businessLoan) {
+    public BusinessLoanCollateral toEntity(BusinessLoanCollateralRequest request, BusinessLoanApplication businessLoanApplication) {
         return BusinessLoanCollateral.builder()
                 .type(parseCollateralType(request.getType()))
                 .name(request.getName())
@@ -26,7 +27,7 @@ public class BusinessLoanCollateralMapper {
                 .quantity(request.getQuantity())
                 .purchasingValue(request.getPurchasingValue())
                 .estimatedValue(request.getEstimatedValue())
-                .businessLoan(businessLoan)
+                .businessLoanApplication(businessLoanApplication)
                 .build();
     }
 
@@ -45,7 +46,7 @@ public class BusinessLoanCollateralMapper {
                 .quantity(collateral.getQuantity())
                 .purchasingValue(collateral.getPurchasingValue())
                 .estimatedValue(collateral.getEstimatedValue())
-                .businessLoanId(collateral.getBusinessLoan() != null ? collateral.getBusinessLoan().getId() : null)
+                .businessLoanId(collateral.getBusinessLoanApplication() != null ? collateral.getBusinessLoanApplication().getCustomerId(): null)
                 .build();
     }
 

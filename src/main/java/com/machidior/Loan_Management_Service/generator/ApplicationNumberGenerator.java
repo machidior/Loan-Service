@@ -3,15 +3,19 @@ package com.machidior.Loan_Management_Service.generator;
 import com.machidior.Loan_Management_Service.config.SpringContext;
 import com.machidior.Loan_Management_Service.repo.ApplicationNumberSequenceRepository;
 import com.machidior.Loan_Management_Service.util.ApplicationNumberSequence;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.id.IdentifierGenerator;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-@Component
-public class ApplicationNumberGenerator {
+public class ApplicationNumberGenerator implements IdentifierGenerator {
 
-    public synchronized String generateApplicationNumber() {
+
+    @Override
+    public synchronized Serializable generate(SharedSessionContractImplementor sharedSessionContractImplementor, Object o) {
         ApplicationNumberSequenceRepository repository =
                 SpringContext.getBean(ApplicationNumberSequenceRepository.class);
 

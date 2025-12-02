@@ -2,6 +2,7 @@ package com.machidior.Loan_Management_Service.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -20,6 +21,7 @@ public class LoanEventLog {
 
     private String eventType; // e.g. CREATED, APPROVED, DISBURSED, REJECTED
     private String payload;
+    @CreationTimestamp
     private LocalDateTime createdAt;
     private String createdBy;
 

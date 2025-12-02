@@ -1,7 +1,7 @@
 package com.machidior.Loan_Management_Service.model;
 
+import com.machidior.Loan_Management_Service.enums.InstallmentFrequency;
 import com.machidior.Loan_Management_Service.enums.LoanStatus;
-import com.machidior.Loan_Management_Service.enums.RepaymentFrequency;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -43,7 +43,7 @@ public class StaffLoan{
     private Integer termMonths;
 
     @Enumerated(EnumType.STRING)
-    private RepaymentFrequency repaymentFrequency;
+    private InstallmentFrequency installmentFrequency;
 
     private String purpose;
 

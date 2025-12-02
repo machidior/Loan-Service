@@ -24,12 +24,12 @@ public class BusinessLoanGuarantorController {
         return ResponseEntity.ok(guarantorService.addGuarantor(loanId, request));
     }
 
-    @GetMapping
-    public ResponseEntity<List<BusinessLoanGuarantorResponse>> getGuarantors(
-            @PathVariable String loanId
-    ) {
-        return ResponseEntity.ok(guarantorService.getAllGuarantors(loanId));
-    }
+//    @GetMapping
+//    public ResponseEntity<List<BusinessLoanGuarantorResponse>> getGuarantors(
+//            @PathVariable String loanId
+//    ) {
+//        return ResponseEntity.ok(guarantorService.getAllGuarantors(loanId));
+//    }
 
     @PutMapping("/{guarantorId}/approve")
     public ResponseEntity<BusinessLoanGuarantorResponse> approveGuarantor(

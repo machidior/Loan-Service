@@ -1,14 +1,10 @@
 package com.machidior.Loan_Management_Service.controller;
 
-import com.machidior.Loan_Management_Service.dtos.ScheduleRequest;
-import com.machidior.Loan_Management_Service.model.RepaymentScheduleItem;
+import com.machidior.Loan_Management_Service.model.RepaymentSchedule;
 import com.machidior.Loan_Management_Service.service.RepaymentScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,13 +14,25 @@ import java.util.List;
 public class RepaymentScheduleController {
     private final RepaymentScheduleService service;
 
-    @PostMapping("/flat")
-    public ResponseEntity<List<RepaymentScheduleItem>> generateFlatRepaymentSchedule(@RequestBody ScheduleRequest request){
-        return ResponseEntity.ok(service.generateFlatSchedule(request.getPrincipal(), request.getMonthlyRate(), request.getLoanFeeRate(), request.getTermMonths(), request.getDisbursementDate(), request.getFrequency()));
+    @GetMapping("/loan-id/{loanId}")
+    public ResponseEntity<RepaymentSchedule> findByLoanId(@PathVariable String loanId){
+        return ResponseEntity.ok(service.getScheduleByLoanId(loanId));
     }
 
-    @PostMapping("/reducing")
-    public ResponseEntity<List<RepaymentScheduleItem>> generateReducingRepaymentSchedule(@RequestBody ScheduleRequest request){
-        return ResponseEntity.ok(service.generateReducingBalanceSchedule(request.getPrincipal(), request.getMonthlyRate(), request.getLoanFeeRate(), request.getTermMonths(), request.getDisbursementDate(), request.getFrequency()));
+    @GetMapping("/all")
+    public ResponseEntity<List<RepaymentSchedule>> getAllSchedule(){
+        return ResponseEntity.ok(service.getAllSchedules());
+    }
+
+    @DeleteMapping("/delete-by-loan-id/{loanId}")
+    public ResponseEntity<?> deleteByLoanId(@PathVariable String loanId){
+        service.deleteByLoanId(loanId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/delete-all")
+    public ResponseEntity<?> deleteAll(){
+        service.deleteAllSchedules();
+        return ResponseEntity.noContent().build();
     }
 }

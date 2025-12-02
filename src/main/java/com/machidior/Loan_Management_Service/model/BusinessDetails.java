@@ -28,7 +28,7 @@ public class BusinessDetails {
     private String brelaCertificate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "business_loan_id", referencedColumnName = "id")
+    @JoinColumn(name = "loan_application_number", referencedColumnName = "applicationNumber")
     @JsonIgnore
-    private BusinessLoan businessLoan;
+    private BusinessLoanApplication businessLoanApplication;
 }
