@@ -25,12 +25,12 @@ public class BusinessLoanApplicationController {
     }
 
     @PostMapping("/reject/{applicationNumber}")
-    public ResponseEntity<BusinessLoanApplicationResponse> rejectSalaryLoanApplication(@PathVariable String applicationNumber, @RequestBody String rejectionReason){
+    public ResponseEntity<BusinessLoanApplicationResponse> rejectBusinessLoanApplication(@PathVariable String applicationNumber, @RequestBody String rejectionReason){
         return ResponseEntity.ok(service.rejectBusinessLoanApplication(applicationNumber,rejectionReason));
     }
 
     @PostMapping("/return/{applicationNumber}")
-    public ResponseEntity<BusinessLoanApplicationResponse> returnSalaryLoanApplication(@PathVariable String applicationNumber, @RequestBody String reasonOfReturn){
+    public ResponseEntity<BusinessLoanApplicationResponse> returnBusinessLoanApplication(@PathVariable String applicationNumber, @RequestBody String reasonOfReturn){
         return ResponseEntity.ok(service.returnBusinessLoanApplication(applicationNumber,reasonOfReturn));
     }
 }

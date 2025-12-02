@@ -1,13 +1,11 @@
 package com.machidior.Loan_Management_Service.service;
 
-import com.machidior.Loan_Management_Service.dtos.LoanApplicationApprovalRequest;
-import com.machidior.Loan_Management_Service.dtos.SalaryLoanApplicationRequest;
-import com.machidior.Loan_Management_Service.dtos.SalaryLoanApplicationResponse;
+import com.machidior.Loan_Management_Service.dtos.*;
 import com.machidior.Loan_Management_Service.enums.LoanApplicationStatus;
 import com.machidior.Loan_Management_Service.enums.LoanProductType;
 import com.machidior.Loan_Management_Service.enums.LoanStatus;
 import com.machidior.Loan_Management_Service.exception.ResourceNotFoundException;
-import com.machidior.Loan_Management_Service.mapper.SalaryLoanApplicationMapper;
+import com.machidior.Loan_Management_Service.mapper.KuzaLoanApplicationMapper;
 import com.machidior.Loan_Management_Service.model.*;
 import com.machidior.Loan_Management_Service.repo.*;
 import lombok.RequiredArgsConstructor;
@@ -18,27 +16,29 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class SalaryLoanApplicationService {
+public class KuzaLoanApplicationService {
 
-    private final SalaryLoanApplicationRepository repository;
+    private final KuzaLoanApplicationRepository repository;
     private final LoanProductTermsRepository loanProductTermsRepository;
     private final LoanProductChargesRepository loanProductChargesRepository;
     private final LoanCalculationService calculator;
-    private final SalaryLoanApplicationMapper mapper;
+    private final KuzaLoanApplicationMapper mapper;
     private final LoanApplicationApprovalRepository loanApplicationApprovalRepository;
-    private final SalaryLoanRepository salaryLoanRepository;
+    private final KuzaLoanRepository kuzaLoanRepository;
     private final LoanApplicationRejectionRepository loanApplicationRejectionRepository;
     private final LoanApplicationReturnRepository loanApplicationReturnRepository;
 
-    public SalaryLoanApplicationResponse applySalaryLoan(SalaryLoanApplicationRequest request){
+    public KuzaLoanApplicationResponse applyKuzaLoan(KuzaLoanApplicationRequest request){
+
+
 
         LoanProductTerms terms = loanProductTermsRepository
-                .findByProductType(LoanProductType.SALARY_PRODUCT)
-                .orElseThrow(() -> new IllegalArgumentException("Loan terms not found for SALARY_PRODUCT"));
+                .findByProductType(LoanProductType.KUZA_CAPITAL)
+                .orElseThrow(() -> new IllegalArgumentException("Loan terms not found for kuza-capital product"));
 
         LoanProductCharges charges = loanProductChargesRepository
-                .findByProductType(LoanProductType.SALARY_PRODUCT)
-                .orElseThrow(() -> new IllegalArgumentException("Loan charges not found for SALARY_PRODUCT"));
+                .findByProductType(LoanProductType.KUZA_CAPITAL)
+                .orElseThrow(() -> new IllegalArgumentException("Loan charges not found for kuza-capital product"));
 
         BigDecimal requestedAmount = request.getAmountRequested();
 
@@ -64,12 +64,7 @@ public class SalaryLoanApplicationService {
                 .multiply(charges.getLoanInsurancePercent())
                 .divide(BigDecimal.valueOf(100));
 
-        BigDecimal totalInterest = requestedAmount
-                .multiply(interestRate)
-                .multiply(BigDecimal.valueOf(request.getTermMonths()))
-                .divide(BigDecimal.valueOf(100));
-
-        SalaryLoanApplication application = mapper.toEntity(request);
+        KuzaLoanApplication application = mapper.toEntity(request);
 
         application.setApplicationFee(applicationFee);
         application.setStatus(LoanApplicationStatus.PENDING);
@@ -77,13 +72,10 @@ public class SalaryLoanApplicationService {
         application.setInterestRate(interestRate);
         application.setLoanInsuranceFee(loanInsurance);
         application.setIsRead(false);
-        application.setProductType(LoanProductType.SALARY_PRODUCT);
+        application.setProductType(LoanProductType.KUZA_CAPITAL);
 
+        BigDecimal loanFeeRate = calculator.calculateLoanFee(terms.getTotalInterestRatePerMonth(), interestRate);
 
-        BigDecimal loanFeeRate = ((request.getTermMonths() == 1))?
-                calculator.calculateLoanFee(terms.getTotalInterestRatePerMonth(), interestRate)
-                :calculator.calculateLoanFee(terms.getTotalInterestPer2Month(), interestRate.add(interestRate))
-                .divide(BigDecimal.valueOf(2));
         application.setLoanFeeRate(loanFeeRate);
 
         return mapper.toResponse( repository.save(application));
@@ -95,8 +87,9 @@ public class SalaryLoanApplicationService {
                 .noneMatch(loan -> loan.getCustomerId().equals(customerId));
     }
 
-    public SalaryLoan approveSalaryLoanApplication(String applicationNumber, LoanApplicationApprovalRequest request){
-        SalaryLoanApplication application = repository.findById(applicationNumber)
+    public KuzaLoan approveKuzaLoanApplication(String applicationNumber, LoanApplicationApprovalRequest request){
+
+        KuzaLoanApplication application = repository.findById(applicationNumber)
                 .orElseThrow(() -> new ResourceNotFoundException("Loan Application with the given application number is not found!"));
 
         LoanApplicationApproval approval = new LoanApplicationApproval();
@@ -106,35 +99,35 @@ public class SalaryLoanApplicationService {
         approval.setApprovedBy("manager");
         approval.setApprovedAt(LocalDateTime.now());
         loanApplicationApprovalRepository.save(approval);
-        
+
         application.setAmountApproved(request.getApprovedAmount());
         application.setStatus(LoanApplicationStatus.APPROVED);
-        SalaryLoanApplication approvedApplication = repository.save(application);
+        KuzaLoanApplication approvedApplication = repository.save(application);
 
-        SalaryLoan loan = getSalaryLoan(approvedApplication);
-        return salaryLoanRepository.save(loan);
+        KuzaLoan loan = getKuzaLoan(approvedApplication);
+        return kuzaLoanRepository.save(loan);
     }
 
-    private static SalaryLoan getSalaryLoan(SalaryLoanApplication approvedApplication) {
-        SalaryLoan loan = new SalaryLoan();
+    private static KuzaLoan getKuzaLoan(KuzaLoanApplication approvedApplication) {
+        KuzaLoan loan = new KuzaLoan();
         loan.setApplicationNumber(approvedApplication.getApplicationNumber());
         loan.setCustomerId(approvedApplication.getCustomerId());
         loan.setPrincipal(approvedApplication.getAmountApproved());
         loan.setInterestRate(approvedApplication.getInterestRate());
         loan.setLoanFeeRate(approvedApplication.getLoanFeeRate());
         loan.setTotalPayableAmount(null);
-        loan.setProductType(approvedApplication.getProductType());
         loan.setTermMonths(approvedApplication.getTermMonths());
+        loan.setProductType(approvedApplication.getProductType());
         loan.setLoanContract(null);
         loan.setStatus(LoanStatus.PENDING);
         loan.setInstallmentFrequency(approvedApplication.getInstallmentFrequency());
         return loan;
     }
 
-    public SalaryLoanApplicationResponse rejectSalaryLoanApplication(String applicationNumber, String rejectionReason){
+    public KuzaLoanApplicationResponse rejectKuzaLoanApplication(String applicationNumber, String rejectionReason){
 
-        SalaryLoanApplication application = repository.findById(applicationNumber)
-                .orElseThrow(() -> new ResourceNotFoundException("Salary loan application with given application number is not found!"));
+        KuzaLoanApplication application = repository.findById(applicationNumber)
+                .orElseThrow(() -> new ResourceNotFoundException("Business loan application with given application number is not found!"));
 
         LoanApplicationRejection rejection = new LoanApplicationRejection();
         rejection.setRejectedBy("manager");
@@ -147,10 +140,10 @@ public class SalaryLoanApplicationService {
         return mapper.toResponse(repository.save(application));
     }
 
-    public SalaryLoanApplicationResponse returnSalaryLoanApplication(String applicationNumber, String reasonOfReturn){
+    public KuzaLoanApplicationResponse returnKuzaLoanApplication(String applicationNumber, String reasonOfReturn){
 
-        SalaryLoanApplication application = repository.findById(applicationNumber)
-                .orElseThrow(() -> new ResourceNotFoundException("Salary loan application with given application number is not found!"));
+        KuzaLoanApplication application = repository.findById(applicationNumber)
+                .orElseThrow(() -> new ResourceNotFoundException("Business loan application with given application number is not found!"));
 
         LoanApplicationReturn loanApplicationReturn = new LoanApplicationReturn();
         loanApplicationReturn.setApplicationNumber(application.getApplicationNumber());
@@ -162,4 +155,5 @@ public class SalaryLoanApplicationService {
         application.setStatus(LoanApplicationStatus.RETURNED);
         return mapper.toResponse(repository.save(application));
     }
+
 }

@@ -1,19 +1,17 @@
 package com.machidior.Loan_Management_Service.mapper;
 
-import com.machidior.Loan_Management_Service.dtos.BusinessLoanGuarantorRequest;
-import com.machidior.Loan_Management_Service.dtos.BusinessLoanGuarantorResponse;
+import com.machidior.Loan_Management_Service.dtos.KuzaLoanGuarantorRequest;
+import com.machidior.Loan_Management_Service.dtos.KuzaLoanGuarantorResponse;
 import com.machidior.Loan_Management_Service.enums.Gender;
-import com.machidior.Loan_Management_Service.model.BusinessLoan;
-import com.machidior.Loan_Management_Service.model.BusinessLoanApplication;
-import com.machidior.Loan_Management_Service.model.BusinessLoanGuarantor;
+import com.machidior.Loan_Management_Service.model.KuzaLoanApplication;
+import com.machidior.Loan_Management_Service.model.KuzaLoanGuarantor;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BusinessLoanGuarantorMapper {
+public class KuzaLoanGuarantorMapper {
 
-
-    public BusinessLoanGuarantor toEntity(BusinessLoanGuarantorRequest request, BusinessLoanApplication businessLoanApplication) {
-        return BusinessLoanGuarantor.builder()
+    public KuzaLoanGuarantor toEntity(KuzaLoanGuarantorRequest request, KuzaLoanApplication kuzaLoanApplication) {
+        return KuzaLoanGuarantor.builder()
                 .name(request.getName())
                 .relationship(request.getRelationship())
                 .phoneNumber(request.getPhoneNumber())
@@ -26,13 +24,13 @@ public class BusinessLoanGuarantorMapper {
                 .guarantee(request.getGuarantee())
                 .GuaranteeValue(request.getGuaranteeValue())
                 .approved(false)
-                .businessLoanApplication(businessLoanApplication)
+                .kuzaLoanApplication(kuzaLoanApplication)
                 .build();
     }
 
 
-    public BusinessLoanGuarantorResponse toResponse(BusinessLoanGuarantor guarantor) {
-        return BusinessLoanGuarantorResponse.builder()
+    public KuzaLoanGuarantorResponse toResponse(KuzaLoanGuarantor guarantor) {
+        return KuzaLoanGuarantorResponse.builder()
                 .id(guarantor.getId())
                 .name(guarantor.getName())
                 .relationship(guarantor.getRelationship())
@@ -47,8 +45,8 @@ public class BusinessLoanGuarantorMapper {
                 .GuaranteeValue(guarantor.getGuaranteeValue())
                 .approved(guarantor.isApproved())
                 .applicationNumber(
-                        guarantor.getBusinessLoanApplication() != null
-                                ? guarantor.getBusinessLoanApplication().getApplicationNumber()
+                        guarantor.getKuzaLoanApplication() != null
+                                ? guarantor.getKuzaLoanApplication().getApplicationNumber()
                                 : null
                 )
                 .build();

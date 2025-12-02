@@ -1,21 +1,19 @@
 package com.machidior.Loan_Management_Service.mapper;
 
-import com.machidior.Loan_Management_Service.dtos.BusinessLoanCollateralRequest;
-import com.machidior.Loan_Management_Service.dtos.BusinessLoanCollateralResponse;
+import com.machidior.Loan_Management_Service.dtos.KuzaLoanCollateralRequest;
+import com.machidior.Loan_Management_Service.dtos.KuzaLoanCollateralResponse;
 import com.machidior.Loan_Management_Service.enums.CollateralCondition;
 import com.machidior.Loan_Management_Service.enums.CollateralPurchaseCondition;
 import com.machidior.Loan_Management_Service.enums.CollateralType;
-import com.machidior.Loan_Management_Service.model.BusinessLoan;
-import com.machidior.Loan_Management_Service.model.BusinessLoanApplication;
-import com.machidior.Loan_Management_Service.model.BusinessLoanCollateral;
+import com.machidior.Loan_Management_Service.model.KuzaLoanApplication;
+import com.machidior.Loan_Management_Service.model.KuzaLoanCollateral;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BusinessLoanCollateralMapper {
+public class KuzaLoanCollateralMapper {
 
-
-    public BusinessLoanCollateral toEntity(BusinessLoanCollateralRequest request, BusinessLoanApplication businessLoanApplication) {
-        return BusinessLoanCollateral.builder()
+    public KuzaLoanCollateral toEntity(KuzaLoanCollateralRequest request, KuzaLoanApplication kuzaLoanApplication) {
+        return KuzaLoanCollateral.builder()
                 .type(parseCollateralType(request.getType()))
                 .name(request.getName())
                 .description(request.getDescription())
@@ -27,12 +25,12 @@ public class BusinessLoanCollateralMapper {
                 .quantity(request.getQuantity())
                 .purchasingValue(request.getPurchasingValue())
                 .estimatedValue(request.getEstimatedValue())
-                .businessLoanApplication(businessLoanApplication)
+                .kuzaLoanApplication(kuzaLoanApplication)
                 .build();
     }
 
-    public BusinessLoanCollateralResponse toResponse(BusinessLoanCollateral collateral) {
-        return BusinessLoanCollateralResponse.builder()
+    public KuzaLoanCollateralResponse toResponse(KuzaLoanCollateral collateral) {
+        return KuzaLoanCollateralResponse.builder()
                 .id(collateral.getId())
                 .CustomerId(collateral.getCustomerId())
                 .type(collateral.getType())
@@ -46,7 +44,7 @@ public class BusinessLoanCollateralMapper {
                 .quantity(collateral.getQuantity())
                 .purchasingValue(collateral.getPurchasingValue())
                 .estimatedValue(collateral.getEstimatedValue())
-                .applicationNumber(collateral.getBusinessLoanApplication() != null ? collateral.getBusinessLoanApplication().getApplicationNumber(): null)
+                .applicationNumber(collateral.getKuzaLoanApplication() != null ? collateral.getKuzaLoanApplication().getApplicationNumber(): null)
                 .build();
     }
 

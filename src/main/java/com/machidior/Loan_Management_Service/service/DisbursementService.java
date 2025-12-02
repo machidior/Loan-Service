@@ -11,10 +11,7 @@ import com.machidior.Loan_Management_Service.exception.ResourceNotFoundException
 import com.machidior.Loan_Management_Service.mapper.DisbursementMapper;
 import com.machidior.Loan_Management_Service.mapper.RepaymentScheduleItemMapper;
 import com.machidior.Loan_Management_Service.model.*;
-import com.machidior.Loan_Management_Service.repo.BusinessLoanRepository;
-import com.machidior.Loan_Management_Service.repo.DisbursementRepository;
-import com.machidior.Loan_Management_Service.repo.RepaymentScheduleRepository;
-import com.machidior.Loan_Management_Service.repo.SalaryLoanRepository;
+import com.machidior.Loan_Management_Service.repo.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +26,7 @@ import java.util.stream.Collectors;
 public class DisbursementService{
     private final DisbursementRepository disbursementRepository;
     private final BusinessLoanRepository businessLoanRepository;
+    private final KuzaLoanRepository kuzaLoanRepository;
     private final SalaryLoanRepository salaryLoanRepository;
     private final RepaymentScheduleRepository repaymentScheduleRepository;
     private final DisbursementMapper mapper;
@@ -115,20 +113,45 @@ public class DisbursementService{
         return mapper.toResponse(savedDisbursement);
     }
 
-    public DisbursementResponse disburseKuzaCapitalLoan(DisbursementRequest request){
-        BusinessLoan businessLoan = businessLoanRepository.findById(request.getLoanId())
-                .orElseThrow(() -> new ResourceNotFoundException("Kuza-Capital Loan with given loan id is not found!"));
+    public DisbursementResponse disburseKuzaLoan(DisbursementRequest request){
+        KuzaLoan kuzaLoan = kuzaLoanRepository.findById(request.getLoanId())
+                .orElseThrow(() -> new ResourceNotFoundException("Kuza Loan with given loan id is not found!"));
+
+
 
         Disbursement disbursement = mapper.toEntity(request);
         disbursement.setLoanProductType(LoanProductType.KUZA_CAPITAL);
         disbursement.setDisbursedBy("manager");
+        disbursement.setAmountDisbursed(kuzaLoan.getPrincipal());
+        disbursement.setStatus(DisbursementStatus.DISBURSED);
+        disbursement.setCustomerId(kuzaLoan.getCustomerId());
 
+        Disbursement savedDisbursement = disbursementRepository.save(disbursement);
 
-        businessLoan.setStatus(LoanStatus.DISBURSED);
-        businessLoanRepository.save(businessLoan);
+        BigDecimal principal = kuzaLoan.getPrincipal();
+        BigDecimal monthlyRate = kuzaLoan.getInterestRate().divide(BigDecimal.valueOf(100));
+        BigDecimal loanFeeRate = kuzaLoan.getLoanFeeRate().divide(BigDecimal.valueOf(100));
+        int termMonths = kuzaLoan.getTermMonths();
+        InstallmentFrequency frequency = kuzaLoan.getInstallmentFrequency();
 
-        return mapper.toResponse(disbursementRepository.save(disbursement));
+        List<RepaymentScheduleItemDTO> scheduleItems = repaymentScheduleService.generateFlatSchedule(principal,monthlyRate,loanFeeRate,termMonths, savedDisbursement.getDisbursementDate(),frequency);
+        RepaymentSchedule schedule = new RepaymentSchedule();
+        schedule.setLoanId(kuzaLoan.getId());
+        List<RepaymentScheduleItem> scheduleItem = scheduleItems.stream()
+                .map(item -> repaymentScheduleItemMapper.toEntity(item,schedule))
+                .toList();
+        schedule.setScheduleItems(scheduleItem);
+        repaymentScheduleRepository.save(schedule);
 
+        BigDecimal totalPayableAmount = BigDecimal.ZERO;
+        for(int i = 0; i < scheduleItems.size(); i++){
+            totalPayableAmount = totalPayableAmount.add(scheduleItems.get(i).getPaymentAmount());
+        }
+        kuzaLoan.setTotalPayableAmount(totalPayableAmount);
+        kuzaLoan.setStatus(LoanStatus.DISBURSED);
+        kuzaLoanRepository.save(kuzaLoan);
+
+        return mapper.toResponse(savedDisbursement);
     }
 
     public DisbursementResponse disburseStaffLoan(DisbursementRequest request){

@@ -8,12 +8,13 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Getter
 @Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BusinessLoanCollateralResponse {
+public class KuzaLoanCollateralResponse {
+
     private Long id;
 
     private String CustomerId;

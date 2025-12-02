@@ -1,8 +1,7 @@
 package com.machidior.Loan_Management_Service.mapper;
 
-import com.machidior.Loan_Management_Service.dtos.SalaryLoanApplicationRequest;
-import com.machidior.Loan_Management_Service.dtos.SalaryLoanApplicationResponse;
-import com.machidior.Loan_Management_Service.enums.LoanApplicationStatus;
+import com.machidior.Loan_Management_Service.dtos.KuzaLoanApplicationRequest;
+import com.machidior.Loan_Management_Service.dtos.KuzaLoanApplicationResponse;
 import com.machidior.Loan_Management_Service.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -12,13 +11,13 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class SalaryLoanApplicationMapper {
+public class KuzaLoanApplicationMapper {
 
-    private final SalaryLoanCollateralMapper collateralMapper;
-    private final SalaryLoanGuarantorMapper guarantorMapper;
+    private final KuzaLoanCollateralMapper collateralMapper;
+    private final KuzaLoanGuarantorMapper guarantorMapper;
 
-    public SalaryLoanApplication toEntity(SalaryLoanApplicationRequest request) {
-        SalaryLoanApplication application = SalaryLoanApplication.builder()
+    public KuzaLoanApplication toEntity(KuzaLoanApplicationRequest request) {
+        KuzaLoanApplication application = KuzaLoanApplication.builder()
                 .customerId(request.getCustomerId())
                 .amountRequested(request.getAmountRequested())
                 .termMonths(request.getTermMonths())
@@ -26,28 +25,33 @@ public class SalaryLoanApplicationMapper {
                 .purpose(request.getPurpose())
                 .loanOfficerId(request.getLoanOfficerId())
                 .remarks(request.getRemarks())
-                .jobDetails(request.getJobDetails())
+                .businessDetails(request.getBusinessDetails())
                 .build();
 
+        if (request.getBusinessDetails() != null) {
+            request.getBusinessDetails().forEach(detail -> detail.setKuzaLoanApplication(application));
+            application.setBusinessDetails(request.getBusinessDetails());
+        }
 
-        if (request.getCollateralRequests() != null) {
-            List<SalaryLoanCollateral> collaterals = request.getCollateralRequests()
+
+        if (request.getCollaterals() != null) {
+            List<KuzaLoanCollateral> collaterals = request.getCollaterals()
                     .stream()
                     .map(req -> collateralMapper.toEntity(req, application))
                     .collect(Collectors.toList());
             application.setCollaterals(collaterals);
         }
 
-        if (request.getGuarantorRequest() != null) {
-            SalaryLoanGuarantor guarantor = guarantorMapper.toEntity(request.getGuarantorRequest(), application);
+        if (request.getGuarantor() != null) {
+            KuzaLoanGuarantor guarantor = guarantorMapper.toEntity(request.getGuarantor(), application);
             application.setGuarantor(guarantor);
         }
 
         return application;
     }
 
-    public SalaryLoanApplicationResponse toResponse(SalaryLoanApplication application) {
-        return SalaryLoanApplicationResponse.builder()
+    public KuzaLoanApplicationResponse toResponse(KuzaLoanApplication application) {
+        return KuzaLoanApplicationResponse.builder()
                 .applicationNumber(application.getApplicationNumber())
                 .customerId(application.getCustomerId())
                 .amountRequested(application.getAmountRequested())
@@ -59,13 +63,14 @@ public class SalaryLoanApplicationMapper {
                 .installmentFrequency(application.getInstallmentFrequency())
                 .purpose(application.getPurpose())
                 .status(application.getStatus())
+                .loanFeeRate(application.getLoanFeeRate())
                 .loanOfficerId(application.getLoanOfficerId())
                 .remarks(application.getRemarks())
                 .applicationFee(application.getApplicationFee())
                 .loanInsuranceFee(application.getLoanInsuranceFee())
                 .createdAt(application.getCreatedAt())
                 .updatedAt(application.getUpdatedAt())
-                .jobDetails(application.getJobDetails())
+                .businessDetails(application.getBusinessDetails())
                 .collaterals(application.getCollaterals() != null
                         ? application.getCollaterals().stream()
                         .map(collateralMapper::toResponse)

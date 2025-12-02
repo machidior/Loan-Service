@@ -13,27 +13,28 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "salary_loan")
+@Table(name = "kuza_loans")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class SalaryLoan {
-    @Id
-    @GeneratedValue(generator = "salary_loan_id_generator")
-    @GenericGenerator(
-            name = "salary_loan_id_generator",
-            strategy = "com.machidior.Loan_Management_Service.generator.SalaryLoanIdGenerator"
-    )
-    private String id;
+public class KuzaLoan {
 
+    @Id
+    @GeneratedValue(generator = "kuza_loan_id_generator")
+    @GenericGenerator(
+            name = "kuza_loan_id_generator",
+            strategy = "com.machidior.Loan_Management_Service.generator.KuzaCapitalLoanIdGenerator"
+    )
+    @Column(length = 20)
+    private String id;
     private String applicationNumber;
+    @Enumerated(EnumType.STRING)
+    private LoanProductType productType;
     private String customerId;
     private BigDecimal principal;
     private BigDecimal interestRate;
-    @Enumerated(EnumType.STRING)
-    private LoanProductType productType;
     private BigDecimal loanFeeRate;
     @Enumerated(EnumType.STRING)
     private InstallmentFrequency installmentFrequency;
@@ -47,5 +48,4 @@ public class SalaryLoan {
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
 }

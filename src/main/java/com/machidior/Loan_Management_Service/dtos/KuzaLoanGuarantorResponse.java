@@ -5,12 +5,13 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Builder
-public class BusinessLoanGuarantorResponse {
+public class KuzaLoanGuarantorResponse {
+
     private Long id;
 
     private String name;

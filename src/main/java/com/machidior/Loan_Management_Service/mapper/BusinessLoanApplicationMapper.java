@@ -26,7 +26,6 @@ public class BusinessLoanApplicationMapper {
                 .purpose(request.getPurpose())
                 .loanOfficerId(request.getLoanOfficerId())
                 .remarks(request.getRemarks())
-                .status(LoanApplicationStatus.PENDING)
                 .businessDetails(request.getBusinessDetails())
                 .build();
 
@@ -67,6 +66,7 @@ public class BusinessLoanApplicationMapper {
                 .status(application.getStatus())
                 .loanOfficerId(application.getLoanOfficerId())
                 .remarks(application.getRemarks())
+                .loanFeeRate(application.getLoanFeeRate())
                 .applicationFee(application.getApplicationFee())
                 .loanInsuranceFee(application.getLoanInsuranceFee())
                 .createdAt(application.getCreatedAt())

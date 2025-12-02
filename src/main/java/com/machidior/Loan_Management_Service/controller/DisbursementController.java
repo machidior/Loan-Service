@@ -26,6 +26,11 @@ public class DisbursementController {
         return ResponseEntity.ok(service.disburseSalaryLoan(request));
     }
 
+    @PostMapping("/disburse/kuza")
+    public ResponseEntity<DisbursementResponse> disburseKuzaLoan(@RequestBody DisbursementRequest request){
+        return ResponseEntity.ok(service.disburseKuzaLoan(request));
+    }
+
     @GetMapping("/loan-id/{loanId}")
     public ResponseEntity<DisbursementResponse> getDisbursementByLoanId(@PathVariable String loanId){
         return ResponseEntity.ok(service.getDisbursementByLoanId(loanId));
