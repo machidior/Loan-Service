@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +39,12 @@ public class DisbursementService{
         BusinessLoan businessLoan = businessLoanRepository.findById(request.getLoanId())
                 .orElseThrow(() -> new ResourceNotFoundException("Business Loan with given loan id is not found!"));
 
-
+        if (businessLoan.getLoanContractUrl()==null){
+            throw new IllegalArgumentException("Loan contract is not uploaded!");
+        }
+        if (businessLoan.getStatus() == LoanStatus.DISBURSED){
+            throw new IllegalArgumentException("Loan already disbursed!");
+        }
 
         Disbursement disbursement = mapper.toEntity(request);
         disbursement.setLoanProductType(LoanProductType.BUSINESS_PRODUCT);
@@ -64,11 +71,12 @@ public class DisbursementService{
         repaymentScheduleRepository.save(schedule);
 
         BigDecimal totalPayableAmount = BigDecimal.ZERO;
-        for(int i = 0; i < scheduleItems.size(); i++){
-            totalPayableAmount = totalPayableAmount.add(scheduleItems.get(i).getPaymentAmount());
+        for (RepaymentScheduleItemDTO item : scheduleItems) {
+            totalPayableAmount = totalPayableAmount.add(item.getPaymentAmount());
         }
         businessLoan.setTotalPayableAmount(totalPayableAmount);
         businessLoan.setStatus(LoanStatus.DISBURSED);
+        businessLoan.setDisbursedOn( savedDisbursement.getDisbursementDate());
         businessLoanRepository.save(businessLoan);
 
         return mapper.toResponse(savedDisbursement);
@@ -77,6 +85,13 @@ public class DisbursementService{
     public DisbursementResponse disburseSalaryLoan(DisbursementRequest request){
         SalaryLoan loan = salaryLoanRepository.findById(request.getLoanId())
                 .orElseThrow(() -> new RuntimeException("Salary loan with the given id is not found!"));
+
+        if (loan.getLoanContractUrl()==null){
+            throw new IllegalArgumentException("Loan contract is not uploaded!");
+        }
+        if (loan.getStatus() == LoanStatus.DISBURSED){
+            throw new IllegalArgumentException("Loan already disbursed!");
+        }
 
         Disbursement disbursement = mapper.toEntity(request);
         disbursement.setLoanProductType(LoanProductType.SALARY_PRODUCT);
@@ -103,13 +118,13 @@ public class DisbursementService{
         repaymentScheduleRepository.save(schedule);
 
         BigDecimal totalPayableAmount = BigDecimal.ZERO;
-        for(int i = 0; i < scheduleItems.size(); i++){
-            totalPayableAmount = totalPayableAmount.add(scheduleItems.get(i).getPaymentAmount());
+        for (RepaymentScheduleItemDTO item : scheduleItems) {
+            totalPayableAmount = totalPayableAmount.add(item.getPaymentAmount());
         }
         loan.setTotalPayableAmount(totalPayableAmount);
         loan.setStatus(LoanStatus.DISBURSED);
+        loan.setDisbursedOn( savedDisbursement.getDisbursementDate());
         salaryLoanRepository.save(loan);
-
         return mapper.toResponse(savedDisbursement);
     }
 
@@ -117,7 +132,12 @@ public class DisbursementService{
         KuzaLoan kuzaLoan = kuzaLoanRepository.findById(request.getLoanId())
                 .orElseThrow(() -> new ResourceNotFoundException("Kuza Loan with given loan id is not found!"));
 
-
+        if (kuzaLoan.getLoanContractUrl()==null){
+            throw new IllegalArgumentException("Loan contract is not uploaded!");
+        }
+        if (kuzaLoan.getStatus() == LoanStatus.DISBURSED){
+            throw new IllegalArgumentException("Loan already disbursed!");
+        }
 
         Disbursement disbursement = mapper.toEntity(request);
         disbursement.setLoanProductType(LoanProductType.KUZA_CAPITAL);
@@ -149,6 +169,7 @@ public class DisbursementService{
         }
         kuzaLoan.setTotalPayableAmount(totalPayableAmount);
         kuzaLoan.setStatus(LoanStatus.DISBURSED);
+        kuzaLoan.setDisbursedOn( savedDisbursement.getDisbursementDate());
         kuzaLoanRepository.save(kuzaLoan);
 
         return mapper.toResponse(savedDisbursement);

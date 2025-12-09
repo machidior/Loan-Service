@@ -14,13 +14,6 @@ import java.util.List;
 @Builder
 public class BusinessLoanApplicationRequest {
 
-    private String customerId;
-    private BigDecimal amountRequested;
-    private Integer termMonths;
-    private InstallmentFrequency installmentFrequency;
-    private String purpose;
-    private String loanOfficerId;
-    private String remarks;
 
     private List<BusinessDetails> businessDetails;
     private List<BusinessLoanCollateralRequest> collaterals;

@@ -21,11 +21,13 @@ public class JobDetails {
     private Long id;
 
     private String companyName;
-    private String bankStatement;
-    private String salarySlip;
-    private String insuranceComprehensiveCover;
-    private String jobContract;
     private String companyLocation;
+    private String role;
+
+    private String bankStatementUrl;
+    private String salarySlipUrl;
+    private String insuranceComprehensiveCoverUrl;
+    private String jobContractUrl;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

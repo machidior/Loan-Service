@@ -56,16 +56,22 @@ public class BusinessLoanApplication {
     private String purpose;
     private String remarks;
 
+    private String bankStatementUrl;
+    private String insuranceComprehensiveCoverUrl;
+    private String businessLicenseUrl;
+    private String tinCertificateUrl;
+    private String brelaCertificateUrl;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "businessLoanApplication", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "businessLoanApplication", cascade = CascadeType.ALL)
     private List<BusinessDetails> businessDetails;
     @OneToOne(mappedBy = "businessLoanApplication", cascade = CascadeType.ALL, orphanRemoval = true)
     private BusinessLoanGuarantor guarantor;
-    @OneToMany(mappedBy = "businessLoanApplication", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "businessLoanApplication", cascade = CascadeType.ALL)
     private List<BusinessLoanCollateral> collaterals;
 
 }

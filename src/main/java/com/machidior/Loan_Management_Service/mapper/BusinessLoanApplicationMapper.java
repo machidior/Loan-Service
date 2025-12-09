@@ -1,5 +1,6 @@
 package com.machidior.Loan_Management_Service.mapper;
 
+import com.machidior.Loan_Management_Service.dtos.ApplicationDetails;
 import com.machidior.Loan_Management_Service.dtos.BusinessLoanApplicationRequest;
 import com.machidior.Loan_Management_Service.dtos.BusinessLoanApplicationResponse;
 import com.machidior.Loan_Management_Service.enums.LoanApplicationStatus;
@@ -17,8 +18,9 @@ public class BusinessLoanApplicationMapper {
     private final BusinessLoanCollateralMapper collateralMapper;
     private final BusinessLoanGuarantorMapper guarantorMapper;
 
-    public BusinessLoanApplication toEntity(BusinessLoanApplicationRequest request) {
-        BusinessLoanApplication application = BusinessLoanApplication.builder()
+    public BusinessLoanApplication toEntity(ApplicationDetails request) {
+
+        return BusinessLoanApplication.builder()
                 .customerId(request.getCustomerId())
                 .amountRequested(request.getAmountRequested())
                 .termMonths(request.getTermMonths())
@@ -26,29 +28,7 @@ public class BusinessLoanApplicationMapper {
                 .purpose(request.getPurpose())
                 .loanOfficerId(request.getLoanOfficerId())
                 .remarks(request.getRemarks())
-                .businessDetails(request.getBusinessDetails())
                 .build();
-
-        if (request.getBusinessDetails() != null) {
-            request.getBusinessDetails().forEach(detail -> detail.setBusinessLoanApplication(application));
-            application.setBusinessDetails(request.getBusinessDetails());
-        }
-
-
-        if (request.getCollaterals() != null) {
-            List<BusinessLoanCollateral> collaterals = request.getCollaterals()
-                    .stream()
-                    .map(req -> collateralMapper.toEntity(req, application))
-                    .collect(Collectors.toList());
-            application.setCollaterals(collaterals);
-        }
-
-        if (request.getGuarantor() != null) {
-            BusinessLoanGuarantor guarantor = guarantorMapper.toEntity(request.getGuarantor(), application);
-            application.setGuarantor(guarantor);
-        }
-
-        return application;
     }
 
     public BusinessLoanApplicationResponse toResponse(BusinessLoanApplication application) {
@@ -72,6 +52,11 @@ public class BusinessLoanApplicationMapper {
                 .createdAt(application.getCreatedAt())
                 .updatedAt(application.getUpdatedAt())
                 .businessDetails(application.getBusinessDetails())
+                .insuranceComprehensiveCoverUrl(application.getInsuranceComprehensiveCoverUrl())
+                .bankStatementUrl(application.getBankStatementUrl())
+                .brelaCertificateUrl(application.getBrelaCertificateUrl())
+                .businessLicenseUrl(application.getBusinessLicenseUrl())
+                .tinCertificateUrl(application.getTinCertificateUrl())
                 .collaterals(application.getCollaterals() != null
                         ? application.getCollaterals().stream()
                         .map(collateralMapper::toResponse)

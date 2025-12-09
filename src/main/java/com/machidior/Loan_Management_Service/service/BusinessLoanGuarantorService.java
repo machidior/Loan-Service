@@ -2,6 +2,7 @@ package com.machidior.Loan_Management_Service.service;
 
 import com.machidior.Loan_Management_Service.dtos.BusinessLoanGuarantorRequest;
 import com.machidior.Loan_Management_Service.dtos.BusinessLoanGuarantorResponse;
+import com.machidior.Loan_Management_Service.exception.ResourceNotFoundException;
 import com.machidior.Loan_Management_Service.mapper.BusinessLoanGuarantorMapper;
 import com.machidior.Loan_Management_Service.model.BusinessLoan;
 import com.machidior.Loan_Management_Service.model.BusinessLoanApplication;
@@ -26,20 +27,14 @@ public class BusinessLoanGuarantorService {
     private final BusinessLoanGuarantorRepository guarantorRepository;
     private final BusinessLoanGuarantorMapper guarantorMapper;
 
-    public BusinessLoanGuarantorResponse addGuarantor(String loanId, BusinessLoanGuarantorRequest request) {
-        BusinessLoanApplication loan = businessLoanApplicationRepository.findById(loanId)
-                .orElseThrow(() -> new EntityNotFoundException("Business loan not found with id: " + loanId));
-
-        BusinessLoanGuarantor guarantor = guarantorMapper.toEntity(request, loan);
-        guarantorRepository.save(guarantor);
+    public BusinessLoanGuarantorResponse getBusinessLoanGuarantor(String applicationNumber){
+        BusinessLoanApplication application = businessLoanApplicationRepository.findById(applicationNumber)
+                .orElseThrow(()-> new ResourceNotFoundException("Business Loan Application not found!"));
+        BusinessLoanGuarantor guarantor = guarantorRepository.findByBusinessLoanApplication(application)
+                .orElseThrow(() -> new EntityNotFoundException("Guarantor not found with application number: " + applicationNumber));
 
         return guarantorMapper.toResponse(guarantor);
     }
-
-//    public List<BusinessLoanGuarantorResponse> getAllGuarantors(String loanId) {
-//        List<BusinessLoanGuarantor> guarantors = guarantorRepository.findByBusinessLoanId(loanId);
-//        return guarantors.stream().map(guarantorMapper::toResponse).collect(Collectors.toList());
-//    }
 
     public BusinessLoanGuarantorResponse approveGuarantor(Long guarantorId) {
         BusinessLoanGuarantor guarantor = guarantorRepository.findById(guarantorId)

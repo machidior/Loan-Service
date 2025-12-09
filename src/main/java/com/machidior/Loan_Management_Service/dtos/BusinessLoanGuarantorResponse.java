@@ -1,6 +1,7 @@
 package com.machidior.Loan_Management_Service.dtos;
 
 import com.machidior.Loan_Management_Service.enums.Gender;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -20,10 +21,13 @@ public class BusinessLoanGuarantorResponse {
     private Gender gender;
     private String email;
     private String occupation;
-    private String age;
+    private Integer age;
     private String address;
     private String guarantee;
     private BigDecimal GuaranteeValue;
+
+    private String passportUrl;
+    private String identificationCardUrl;
 
     private boolean approved;
 

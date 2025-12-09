@@ -37,10 +37,11 @@ public class SalaryLoanApplicationResponse {
     private String purpose;
     private String remarks;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
     private JobDetails jobDetails;
     private SalaryLoanGuarantorResponse guarantor;
     private List<SalaryLoanCollateralResponse> collaterals;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

@@ -20,10 +20,13 @@ public class SalaryLoanGuarantorResponse {
     private Gender gender;
     private String email;
     private String occupation;
-    private String age;
+    private Integer age;
     private String address;
     private String guarantee;
-    private BigDecimal GuaranteeValue;
+    private BigDecimal guaranteeValue;
+
+    private String passportUrl;
+    private String identificationCardUrl;
 
     private boolean approved;
 

@@ -37,6 +37,12 @@ public class BusinessLoanApplicationResponse {
     private String purpose;
     private String remarks;
 
+    private String bankStatementUrl;
+    private String insuranceComprehensiveCoverUrl;
+    private String businessLicenseUrl;
+    private String tinCertificateUrl;
+    private String brelaCertificateUrl;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

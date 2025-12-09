@@ -5,9 +5,12 @@ import com.machidior.Loan_Management_Service.enums.CollateralPurchaseCondition;
 import com.machidior.Loan_Management_Service.enums.CollateralType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "kuza_loan_collaterals")
@@ -30,7 +33,7 @@ public class KuzaLoanCollateral {
     private String location;
     @Enumerated(EnumType.STRING)
     private CollateralPurchaseCondition purchaseCondition;
-    private String photo;
+    private String photoUrl;
     @Enumerated(EnumType.STRING)
     private CollateralCondition condition;
     private LocalDate purchaseDate;
@@ -39,6 +42,11 @@ public class KuzaLoanCollateral {
     private BigDecimal purchasingValue;
     @Column(name = "estimated_value")
     private BigDecimal estimatedValue;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "loan_application_number")

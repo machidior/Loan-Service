@@ -1,12 +1,11 @@
 package com.machidior.Loan_Management_Service.mapper;
 
-import com.machidior.Loan_Management_Service.dtos.KuzaLoanApplicationRequest;
+import com.machidior.Loan_Management_Service.dtos.ApplicationDetails;
 import com.machidior.Loan_Management_Service.dtos.KuzaLoanApplicationResponse;
 import com.machidior.Loan_Management_Service.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -16,8 +15,9 @@ public class KuzaLoanApplicationMapper {
     private final KuzaLoanCollateralMapper collateralMapper;
     private final KuzaLoanGuarantorMapper guarantorMapper;
 
-    public KuzaLoanApplication toEntity(KuzaLoanApplicationRequest request) {
-        KuzaLoanApplication application = KuzaLoanApplication.builder()
+    public KuzaLoanApplication toEntity(ApplicationDetails request) {
+
+        return KuzaLoanApplication.builder()
                 .customerId(request.getCustomerId())
                 .amountRequested(request.getAmountRequested())
                 .termMonths(request.getTermMonths())
@@ -25,29 +25,7 @@ public class KuzaLoanApplicationMapper {
                 .purpose(request.getPurpose())
                 .loanOfficerId(request.getLoanOfficerId())
                 .remarks(request.getRemarks())
-                .businessDetails(request.getBusinessDetails())
                 .build();
-
-        if (request.getBusinessDetails() != null) {
-            request.getBusinessDetails().forEach(detail -> detail.setKuzaLoanApplication(application));
-            application.setBusinessDetails(request.getBusinessDetails());
-        }
-
-
-        if (request.getCollaterals() != null) {
-            List<KuzaLoanCollateral> collaterals = request.getCollaterals()
-                    .stream()
-                    .map(req -> collateralMapper.toEntity(req, application))
-                    .collect(Collectors.toList());
-            application.setCollaterals(collaterals);
-        }
-
-        if (request.getGuarantor() != null) {
-            KuzaLoanGuarantor guarantor = guarantorMapper.toEntity(request.getGuarantor(), application);
-            application.setGuarantor(guarantor);
-        }
-
-        return application;
     }
 
     public KuzaLoanApplicationResponse toResponse(KuzaLoanApplication application) {
@@ -71,6 +49,11 @@ public class KuzaLoanApplicationMapper {
                 .createdAt(application.getCreatedAt())
                 .updatedAt(application.getUpdatedAt())
                 .businessDetails(application.getBusinessDetails())
+                .insuranceComprehensiveCoverUrl(application.getInsuranceComprehensiveCoverUrl())
+                .bankStatementUrl(application.getBankStatementUrl())
+                .brelaCertificateUrl(application.getBrelaCertificateUrl())
+                .businessLicenseUrl(application.getBusinessLicenseUrl())
+                .tinCertificateUrl(application.getTinCertificateUrl())
                 .collaterals(application.getCollaterals() != null
                         ? application.getCollaterals().stream()
                         .map(collateralMapper::toResponse)

@@ -1,20 +1,23 @@
 package com.machidior.Loan_Management_Service.service;
 
-import com.machidior.Loan_Management_Service.dtos.LoanApplicationApprovalRequest;
-import com.machidior.Loan_Management_Service.dtos.SalaryLoanApplicationRequest;
-import com.machidior.Loan_Management_Service.dtos.SalaryLoanApplicationResponse;
+import com.machidior.Loan_Management_Service.dtos.*;
 import com.machidior.Loan_Management_Service.enums.LoanApplicationStatus;
 import com.machidior.Loan_Management_Service.enums.LoanProductType;
 import com.machidior.Loan_Management_Service.enums.LoanStatus;
 import com.machidior.Loan_Management_Service.exception.ResourceNotFoundException;
 import com.machidior.Loan_Management_Service.mapper.SalaryLoanApplicationMapper;
+import com.machidior.Loan_Management_Service.mapper.SalaryLoanGuarantorMapper;
 import com.machidior.Loan_Management_Service.model.*;
 import com.machidior.Loan_Management_Service.repo.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,12 +28,14 @@ public class SalaryLoanApplicationService {
     private final LoanProductChargesRepository loanProductChargesRepository;
     private final LoanCalculationService calculator;
     private final SalaryLoanApplicationMapper mapper;
+    private final SalaryLoanGuarantorMapper guarantorMapper;
     private final LoanApplicationApprovalRepository loanApplicationApprovalRepository;
     private final SalaryLoanRepository salaryLoanRepository;
     private final LoanApplicationRejectionRepository loanApplicationRejectionRepository;
     private final LoanApplicationReturnRepository loanApplicationReturnRepository;
+    private final FileStorageService fileStorageService;
 
-    public SalaryLoanApplicationResponse applySalaryLoan(SalaryLoanApplicationRequest request){
+    public SalaryLoanApplicationResponse applySalaryLoan(ApplicationDetails details){
 
         LoanProductTerms terms = loanProductTermsRepository
                 .findByProductType(LoanProductType.SALARY_PRODUCT)
@@ -40,7 +45,7 @@ public class SalaryLoanApplicationService {
                 .findByProductType(LoanProductType.SALARY_PRODUCT)
                 .orElseThrow(() -> new IllegalArgumentException("Loan charges not found for SALARY_PRODUCT"));
 
-        BigDecimal requestedAmount = request.getAmountRequested();
+        BigDecimal requestedAmount = details.getAmountRequested();
 
         if (requestedAmount.compareTo(terms.getMinAmount()) < 0 ||
                 requestedAmount.compareTo(terms.getMaxAmount()) > 0) {
@@ -48,14 +53,14 @@ public class SalaryLoanApplicationService {
                     terms.getMinAmount() + " - " + terms.getMaxAmount());
         }
 
-        if (request.getTermMonths()>terms.getMaximumTermMonths()) {
+        if (details.getTermMonths()>terms.getMaximumTermMonths()) {
             throw new IllegalArgumentException("Term months must not exceed " + terms.getMaximumTermMonths() + " months");
         }
 
         BigDecimal interestRate = terms.getMonthlyInterestRate();
 
 
-        boolean isFirstLoan = isFirstLoanForCustomer(request.getCustomerId());
+        boolean isFirstLoan = isFirstLoanForCustomer(details.getCustomerId());
         BigDecimal applicationFee = isFirstLoan
                 ? charges.getFirstApplicationFee()
                 : charges.getSubsequentApplicationFee();
@@ -66,21 +71,24 @@ public class SalaryLoanApplicationService {
 
         BigDecimal totalInterest = requestedAmount
                 .multiply(interestRate)
-                .multiply(BigDecimal.valueOf(request.getTermMonths()))
+                .multiply(BigDecimal.valueOf(details.getTermMonths()))
                 .divide(BigDecimal.valueOf(100));
 
-        SalaryLoanApplication application = mapper.toEntity(request);
+        SalaryLoanApplication application = mapper.toEntity(details);
 
         application.setApplicationFee(applicationFee);
-        application.setStatus(LoanApplicationStatus.PENDING);
+        application.setStatus(LoanApplicationStatus.DRAFTED);
         application.setAmountApproved(null);
         application.setInterestRate(interestRate);
+        application.setGuarantor(null);
+        application.setCollaterals(null);
+        application.setJobDetails(null);
         application.setLoanInsuranceFee(loanInsurance);
         application.setIsRead(false);
         application.setProductType(LoanProductType.SALARY_PRODUCT);
 
 
-        BigDecimal loanFeeRate = ((request.getTermMonths() == 1))?
+        BigDecimal loanFeeRate = ((details.getTermMonths() == 1))?
                 calculator.calculateLoanFee(terms.getTotalInterestRatePerMonth(), interestRate)
                 :calculator.calculateLoanFee(terms.getTotalInterestPer2Month(), interestRate.add(interestRate))
                 .divide(BigDecimal.valueOf(2));
@@ -94,6 +102,110 @@ public class SalaryLoanApplicationService {
                 .stream()
                 .noneMatch(loan -> loan.getCustomerId().equals(customerId));
     }
+
+    public SalaryLoanApplicationResponse saveJobDetails(
+            String applicationNumber,
+            MultipartFile bankStatement,
+            MultipartFile salarySlip,
+            MultipartFile insuranceComprehensiveCover,
+            MultipartFile jobContract,
+            JobDetails jobDetails
+    ) throws IOException {
+        SalaryLoanApplication application = repository.findById(applicationNumber)
+                .orElseThrow(() -> new ResourceNotFoundException("Loan Application with the given application number is not found!"));
+
+        application.setJobDetails(jobDetails);
+        SalaryLoanApplication updatedApplication = repository.save(application);
+
+        String bankStatementUrl = fileStorageService.saveJobFiles(bankStatement,updatedApplication.getApplicationNumber(),"BANK-STATEMENT");
+        String salarySlipUrl = fileStorageService.saveJobFiles(salarySlip, updatedApplication.getApplicationNumber(),"SALARY-SLIP");
+        String insuranceComprehensiveCoverUrl = fileStorageService.saveJobFiles(insuranceComprehensiveCover, updatedApplication.getApplicationNumber(),"INSURANCE-COVER");
+        String jobContractUrl = fileStorageService.saveJobFiles(jobContract, updatedApplication.getApplicationNumber(),"JOB-CONTRACT");
+
+        updatedApplication.getJobDetails().setBankStatementUrl(bankStatementUrl);
+        updatedApplication.getJobDetails().setSalarySlipUrl(salarySlipUrl);
+        updatedApplication.getJobDetails().setInsuranceComprehensiveCoverUrl(insuranceComprehensiveCoverUrl);
+        updatedApplication.getJobDetails().setJobContractUrl(jobContractUrl);
+
+        return mapper.toResponse(repository.save(updatedApplication));
+    }
+
+    public SalaryLoanApplicationResponse saveLoanCollaterals(String applicationNumber, List<SalaryLoanCollateralRequest> collateralRequests, List<MultipartFile> photos) throws IOException {
+        SalaryLoanApplication application = repository.findById(applicationNumber)
+                .orElseThrow(() -> new ResourceNotFoundException("Loan Application with the given application number is not found!"));
+
+        if (collateralRequests.size() != photos.size()){
+            throw new IllegalArgumentException("Collateral count and photo count must match!");
+        }
+
+        List<SalaryLoanCollateral> collaterals = new ArrayList<>();
+        for (int i=0; i<collateralRequests.size(); i++){
+            MultipartFile photo = photos.get(i);
+            String photoUrl = fileStorageService.saveCollateralFiles(photo, application.getApplicationNumber(),"COLLATERAL-PHOTO");
+
+            SalaryLoanCollateral collateral = getSalaryLoanCollateral(collateralRequests.get(i), application, photoUrl);
+
+            collaterals.add(collateral);
+        }
+        application.setCollaterals(collaterals);
+        return mapper.toResponse(repository.save(application));
+    }
+
+    public SalaryLoanApplicationResponse saveLoanGuarantor(
+            String applicationNumber,
+            MultipartFile passport,
+            MultipartFile identificationCard,
+            SalaryLoanGuarantorRequest request) throws IOException {
+        SalaryLoanApplication application = repository.findById(applicationNumber)
+                .orElseThrow(() -> new ResourceNotFoundException("Loan Application with the given application number is not found!"));
+        application.setGuarantor(guarantorMapper.toEntity(request,application));
+        SalaryLoanApplication updatedApplication = repository.save(application);
+
+        String passportUrl = fileStorageService.saveGuarantorFiles(passport, updatedApplication.getApplicationNumber(), "PASSPORT");
+        String identificationCardUrl = fileStorageService.saveGuarantorFiles(identificationCard, updatedApplication.getApplicationNumber(), "IDENTIFICATION-CARD");
+        updatedApplication.getGuarantor().setPassportUrl(passportUrl);
+        updatedApplication.getGuarantor().setIdentificationCardUrl(identificationCardUrl);
+
+        return mapper.toResponse(repository.save(updatedApplication));
+    }
+
+    private static SalaryLoanCollateral getSalaryLoanCollateral(SalaryLoanCollateralRequest request, SalaryLoanApplication application, String photoUrl) {
+        SalaryLoanCollateral collateral = new SalaryLoanCollateral();
+        collateral.setCustomerId(application.getCustomerId());
+        collateral.setType(request.getType());
+        collateral.setName(request.getName());
+        collateral.setDescription(request.getDescription());
+        collateral.setLocation(request.getLocation());
+        collateral.setPurchaseCondition(request.getPurchaseCondition());
+        collateral.setCondition(request.getCondition());
+        collateral.setPhotoUrl(photoUrl);
+        collateral.setPurchaseDate(request.getPurchaseDate());
+        collateral.setQuantity(request.getQuantity());
+        collateral.setPurchasingValue(request.getPurchasingValue());
+        collateral.setEstimatedValue(request.getEstimatedValue());
+        collateral.setSalaryLoanApplication(application);
+        return collateral;
+    }
+
+    public SalaryLoanApplicationResponse createApplication(String applicationNumber){
+
+        SalaryLoanApplication application = repository.findById(applicationNumber)
+                .orElseThrow(() -> new ResourceNotFoundException("Loan Application wi th application number " +applicationNumber + " is not found!"));
+
+        if (application.getJobDetails() == null){
+            throw new IllegalArgumentException("Please provide job details");
+        }
+        if (application.getGuarantor() == null){
+            throw new IllegalArgumentException("Please provide guarantor details");
+        }
+        if (application.getCollaterals().isEmpty()){
+            throw new IllegalArgumentException("Please provide loan collaterals");
+        }
+
+        application.setStatus(LoanApplicationStatus.PENDING);
+        return mapper.toResponse(repository.save(application));
+    }
+
 
     public SalaryLoan approveSalaryLoanApplication(String applicationNumber, LoanApplicationApprovalRequest request){
         SalaryLoanApplication application = repository.findById(applicationNumber)
@@ -125,7 +237,9 @@ public class SalaryLoanApplicationService {
         loan.setTotalPayableAmount(null);
         loan.setProductType(approvedApplication.getProductType());
         loan.setTermMonths(approvedApplication.getTermMonths());
-        loan.setLoanContract(null);
+        loan.setLoanContractUrl(null);
+        loan.setAppliedOn(approvedApplication.getCreatedAt());
+        loan.setApprovedOn(LocalDateTime.now());
         loan.setStatus(LoanStatus.PENDING);
         loan.setInstallmentFrequency(approvedApplication.getInstallmentFrequency());
         return loan;
@@ -162,4 +276,11 @@ public class SalaryLoanApplicationService {
         application.setStatus(LoanApplicationStatus.RETURNED);
         return mapper.toResponse(repository.save(application));
     }
+
+    public SalaryLoanApplicationResponse getLoanApplication(String applicationNumber){
+        SalaryLoanApplication application = repository.findById(applicationNumber)
+                .orElseThrow(()-> new ResourceNotFoundException("Loan application is not found!"));
+        return mapper.toResponse(application);
+    }
+
 }

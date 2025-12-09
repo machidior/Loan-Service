@@ -65,7 +65,7 @@ public class SalaryLoanApplication {
     private JobDetails jobDetails;
     @OneToOne(mappedBy = "salaryLoanApplication", cascade = CascadeType.ALL, orphanRemoval = true)
     private SalaryLoanGuarantor guarantor;
-    @OneToMany(mappedBy = "salaryLoanApplication", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "salaryLoanApplication", cascade = CascadeType.ALL)
     private List<SalaryLoanCollateral> collaterals;
 
 }

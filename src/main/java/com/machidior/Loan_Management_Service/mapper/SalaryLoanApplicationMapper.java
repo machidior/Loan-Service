@@ -1,5 +1,6 @@
 package com.machidior.Loan_Management_Service.mapper;
 
+import com.machidior.Loan_Management_Service.dtos.ApplicationDetails;
 import com.machidior.Loan_Management_Service.dtos.SalaryLoanApplicationRequest;
 import com.machidior.Loan_Management_Service.dtos.SalaryLoanApplicationResponse;
 import com.machidior.Loan_Management_Service.enums.LoanApplicationStatus;
@@ -17,33 +18,18 @@ public class SalaryLoanApplicationMapper {
     private final SalaryLoanCollateralMapper collateralMapper;
     private final SalaryLoanGuarantorMapper guarantorMapper;
 
-    public SalaryLoanApplication toEntity(SalaryLoanApplicationRequest request) {
-        SalaryLoanApplication application = SalaryLoanApplication.builder()
-                .customerId(request.getCustomerId())
-                .amountRequested(request.getAmountRequested())
-                .termMonths(request.getTermMonths())
-                .installmentFrequency(request.getInstallmentFrequency())
-                .purpose(request.getPurpose())
-                .loanOfficerId(request.getLoanOfficerId())
-                .remarks(request.getRemarks())
-                .jobDetails(request.getJobDetails())
+    public SalaryLoanApplication toEntity(ApplicationDetails details) {
+
+
+        return SalaryLoanApplication.builder()
+                .customerId(details.getCustomerId())
+                .amountRequested(details.getAmountRequested())
+                .termMonths(details.getTermMonths())
+                .installmentFrequency(details.getInstallmentFrequency())
+                .purpose(details.getPurpose())
+                .loanOfficerId(details.getLoanOfficerId())
+                .remarks(details.getRemarks())
                 .build();
-
-
-        if (request.getCollateralRequests() != null) {
-            List<SalaryLoanCollateral> collaterals = request.getCollateralRequests()
-                    .stream()
-                    .map(req -> collateralMapper.toEntity(req, application))
-                    .collect(Collectors.toList());
-            application.setCollaterals(collaterals);
-        }
-
-        if (request.getGuarantorRequest() != null) {
-            SalaryLoanGuarantor guarantor = guarantorMapper.toEntity(request.getGuarantorRequest(), application);
-            application.setGuarantor(guarantor);
-        }
-
-        return application;
     }
 
     public SalaryLoanApplicationResponse toResponse(SalaryLoanApplication application) {

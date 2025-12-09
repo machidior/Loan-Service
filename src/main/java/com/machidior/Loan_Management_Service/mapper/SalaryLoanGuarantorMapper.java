@@ -16,7 +16,7 @@ public class SalaryLoanGuarantorMapper {
                 .relationship(request.getRelationship())
                 .phoneNumber(request.getPhoneNumber())
                 .nationalId(request.getNationalId())
-                .gender(parseGender(request.getGender()))
+                .gender(request.getGender())
                 .email(request.getEmail())
                 .occupation(request.getOccupation())
                 .age(request.getAge())
@@ -42,7 +42,7 @@ public class SalaryLoanGuarantorMapper {
                 .age(guarantor.getAge())
                 .address(guarantor.getAddress())
                 .guarantee(guarantor.getGuarantee())
-                .GuaranteeValue(guarantor.getGuaranteeValue())
+                .guaranteeValue(guarantor.getGuaranteeValue())
                 .approved(guarantor.isApproved())
                 .applicationNumber(
                         guarantor.getSalaryLoanApplication() != null

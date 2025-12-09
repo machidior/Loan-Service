@@ -1,37 +1,34 @@
 package com.machidior.Loan_Management_Service.service;
 
-
 import com.machidior.Loan_Management_Service.exception.ResourceNotFoundException;
 import com.machidior.Loan_Management_Service.model.BusinessLoan;
-import com.machidior.Loan_Management_Service.repo.BusinessLoanRepository;
+import com.machidior.Loan_Management_Service.model.KuzaLoan;
+import com.machidior.Loan_Management_Service.repo.KuzaLoanRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
-public class BusinessLoanService  {
+public class KuzaLoanService {
 
-    private final BusinessLoanRepository businessLoanRepository;
+    private final KuzaLoanRepository kuzaLoanRepository;
     private final FileStorageService fileStorageService;
 
-    public BusinessLoan uploadLoanContract(String loanId, MultipartFile loanContract) throws IOException {
+    public KuzaLoan uploadLoanContract(String loanId, MultipartFile loanContract) throws IOException {
 
-        BusinessLoan loan = businessLoanRepository.findById(loanId)
+        KuzaLoan loan = kuzaLoanRepository.findById(loanId)
                 .orElseThrow(() -> new ResourceNotFoundException("Loan with the given id is not found!"));
 
         String loanContractUrl = fileStorageService.saveLoanContractFiles(loanContract, loan.getId(), "LOAN-CONTRACT");
         loan.setLoanContractUrl(loanContractUrl);
-        return businessLoanRepository.save(loan);
+        return kuzaLoanRepository.save(loan);
     }
 
-    public BusinessLoan getBusinessLoan(String id){
-        return businessLoanRepository.findById(id)
+    public KuzaLoan getKuzaLoan(String id){
+        return kuzaLoanRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Business Loan not found!"));
     }
-
 }

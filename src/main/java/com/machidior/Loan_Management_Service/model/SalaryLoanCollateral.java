@@ -33,7 +33,7 @@ public class SalaryLoanCollateral {
     private String location;
     @Enumerated(EnumType.STRING)
     private CollateralPurchaseCondition purchaseCondition;
-    private String photo;
+    private String photoUrl;
     @Enumerated(EnumType.STRING)
     private CollateralCondition condition;
     private LocalDate purchaseDate;

@@ -2,6 +2,7 @@ package com.machidior.Loan_Management_Service.service;
 
 import com.machidior.Loan_Management_Service.dtos.BusinessLoanCollateralRequest;
 import com.machidior.Loan_Management_Service.dtos.BusinessLoanCollateralResponse;
+import com.machidior.Loan_Management_Service.exception.ResourceNotFoundException;
 import com.machidior.Loan_Management_Service.mapper.BusinessLoanCollateralMapper;
 import com.machidior.Loan_Management_Service.model.BusinessLoan;
 import com.machidior.Loan_Management_Service.model.BusinessLoanApplication;
@@ -22,24 +23,18 @@ import java.util.stream.Collectors;
 @Transactional
 public class BusinessLoanCollateralService {
 
-    private final BusinessLoanApplicationRepository businessLoanApplicationRepositoryRepository;
+    private final BusinessLoanApplicationRepository businessLoanApplicationRepository;
     private final BusinessLoanCollateralRepository collateralRepository;
     private final BusinessLoanCollateralMapper collateralMapper;
 
-    public BusinessLoanCollateralResponse addCollateral(String loanId, BusinessLoanCollateralRequest request) {
-        BusinessLoanApplication loan = businessLoanApplicationRepositoryRepository.findById(loanId)
-                .orElseThrow(() -> new EntityNotFoundException("Business loan not found with id: " + loanId));
-
-        BusinessLoanCollateral collateral = collateralMapper.toEntity(request, loan);
-        collateralRepository.save(collateral);
-
-        return collateralMapper.toResponse(collateral);
+    public List<BusinessLoanCollateralResponse> getApplicationCollaterals(String applicationNumber){
+        BusinessLoanApplication application = businessLoanApplicationRepository.findById(applicationNumber)
+                .orElseThrow(()-> new ResourceNotFoundException("Business loan not found!"));
+        return collateralRepository.findByBusinessLoanApplication(application)
+                .stream()
+                .map(collateralMapper::toResponse)
+                .collect(Collectors.toList());
     }
-
-//    public List<BusinessLoanCollateralResponse> getAllCollaterals(String applicationNumber) {
-//        List<BusinessLoanCollateral> collaterals = collateralRepository.findByLoanApplicationNumber(applicationNumber);
-//        return collaterals.stream().map(collateralMapper::toResponse).collect(Collectors.toList());
-//    }
 
     public void deleteCollateral(Long id) {
         if (!collateralRepository.existsById(id)) {

@@ -16,13 +16,13 @@ public class KuzaLoanGuarantorMapper {
                 .relationship(request.getRelationship())
                 .phoneNumber(request.getPhoneNumber())
                 .nationalId(request.getNationalId())
-                .gender(parseGender(request.getGender()))
+                .gender(request.getGender())
                 .email(request.getEmail())
                 .occupation(request.getOccupation())
                 .age(request.getAge())
                 .address(request.getAddress())
                 .guarantee(request.getGuarantee())
-                .GuaranteeValue(request.getGuaranteeValue())
+                .guaranteeValue(request.getGuaranteeValue())
                 .approved(false)
                 .kuzaLoanApplication(kuzaLoanApplication)
                 .build();
@@ -42,7 +42,9 @@ public class KuzaLoanGuarantorMapper {
                 .age(guarantor.getAge())
                 .address(guarantor.getAddress())
                 .guarantee(guarantor.getGuarantee())
-                .GuaranteeValue(guarantor.getGuaranteeValue())
+                .passportUrl(guarantor.getPassportUrl())
+                .identificationCardUrl(guarantor.getIdentificationCardUrl())
+                .guaranteeValue(guarantor.getGuaranteeValue())
                 .approved(guarantor.isApproved())
                 .applicationNumber(
                         guarantor.getKuzaLoanApplication() != null

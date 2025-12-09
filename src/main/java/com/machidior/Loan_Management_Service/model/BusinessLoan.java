@@ -10,6 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -42,7 +43,10 @@ public class BusinessLoan {
     private LoanStatus status;
     private BigDecimal totalPayableAmount;
     private Integer termMonths;
-    private String loanContract;
+    private String loanContractUrl;
+    private LocalDate disbursedOn;
+    private LocalDateTime approvedOn;
+    private LocalDateTime appliedOn;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

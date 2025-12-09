@@ -55,16 +55,22 @@ public class KuzaLoanApplication {
     private String purpose;
     private String remarks;
 
+    private String bankStatementUrl;
+    private String insuranceComprehensiveCoverUrl;
+    private String businessLicenseUrl;
+    private String tinCertificateUrl;
+    private String brelaCertificateUrl;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "kuzaLoanApplication", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "kuzaLoanApplication", cascade = CascadeType.ALL)
     private List<KuzaBusinessDetails> businessDetails;
     @OneToOne(mappedBy = "kuzaLoanApplication", cascade = CascadeType.ALL, orphanRemoval = true)
     private KuzaLoanGuarantor guarantor;
-    @OneToMany(mappedBy = "kuzaLoanApplication", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "kuzaLoanApplication", cascade = CascadeType.ALL)
     private List<KuzaLoanCollateral> collaterals;
 
 }

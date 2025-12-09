@@ -23,7 +23,7 @@ public class BusinessLoanCollateralResponse {
     private String location;
     private CollateralPurchaseCondition purchaseCondition;
     private CollateralCondition condition;
-    private String photo;
+    private String photoUrl;
     private LocalDate purchaseDate;
     private Integer quantity;
     private BigDecimal purchasingValue;

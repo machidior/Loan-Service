@@ -10,30 +10,21 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/business-loans/{loanId}/collaterals")
+@RequestMapping("/api/v1/business-loans/collaterals")
 @RequiredArgsConstructor
 public class BusinessLoanCollateralController {
 
     private final BusinessLoanCollateralService collateralService;
 
-    @PostMapping
-    public ResponseEntity<BusinessLoanCollateralResponse> addCollateral(
-            @PathVariable String loanId,
-            @RequestBody BusinessLoanCollateralRequest request
-    ) {
-        return ResponseEntity.ok(collateralService.addCollateral(loanId, request));
-    }
-
-//    @GetMapping
-//    public ResponseEntity<List<BusinessLoanCollateralResponse>> getCollaterals(
-//            @PathVariable String loanId
-//    ) {
-//        return ResponseEntity.ok(collateralService.getAllCollaterals(loanId));
-//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCollateral(@PathVariable Long id) {
         collateralService.deleteCollateral(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/application-number/{applicationNumber}")
+    public ResponseEntity<List<BusinessLoanCollateralResponse>> getApplicationCollaterals(@PathVariable String applicationNumber){
+        return ResponseEntity.ok(collateralService.getApplicationCollaterals(applicationNumber));
     }
 }

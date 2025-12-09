@@ -3,6 +3,10 @@ package com.machidior.Loan_Management_Service.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "kuza_loan_business_details")
@@ -19,13 +23,14 @@ public class KuzaBusinessDetails {
     private String businessName;
     private String businessType;
     private String businessAddress;
+    private String businessSector;
     private Integer yearsInOperation;
-    private String bankStatement;
-    private String insuranceComprehensiveCover;
-    private String businessLicense;
-    private String tinCertificate;
     private String tinNumber;
-    private String brelaCertificate;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "loan_application_number", referencedColumnName = "applicationNumber")

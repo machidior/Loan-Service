@@ -2,7 +2,11 @@ package com.machidior.Loan_Management_Service.dtos;
 
 
 import com.machidior.Loan_Management_Service.enums.CollateralCondition;
+import com.machidior.Loan_Management_Service.enums.CollateralPurchaseCondition;
+import com.machidior.Loan_Management_Service.enums.CollateralType;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -12,13 +16,12 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class BusinessLoanCollateralRequest {
-    private String type;
+    private CollateralType type;
     private String name;
     private String description;
     private String location;
-    private String purchaseCondition;
-    private String condition;
-    private String photo;
+    private CollateralPurchaseCondition purchaseCondition;
+    private CollateralCondition condition;
     private LocalDate purchaseDate;
     private Integer quantity;
     private BigDecimal purchasingValue;

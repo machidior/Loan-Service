@@ -10,32 +10,24 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/business-loans/{loanId}/guarantors")
+@RequestMapping("/api/v1/business-loans/guarantors")
 @RequiredArgsConstructor
 public class BusinessLoanGuarantorController {
 
     private final BusinessLoanGuarantorService guarantorService;
 
-    @PostMapping
-    public ResponseEntity<BusinessLoanGuarantorResponse> addGuarantor(
-            @PathVariable String loanId,
-            @RequestBody BusinessLoanGuarantorRequest request
-    ) {
-        return ResponseEntity.ok(guarantorService.addGuarantor(loanId, request));
-    }
 
-//    @GetMapping
-//    public ResponseEntity<List<BusinessLoanGuarantorResponse>> getGuarantors(
-//            @PathVariable String loanId
-//    ) {
-//        return ResponseEntity.ok(guarantorService.getAllGuarantors(loanId));
-//    }
 
     @PutMapping("/{guarantorId}/approve")
     public ResponseEntity<BusinessLoanGuarantorResponse> approveGuarantor(
             @PathVariable Long guarantorId
     ) {
         return ResponseEntity.ok(guarantorService.approveGuarantor(guarantorId));
+    }
+
+    @GetMapping("/application-number/{applicationNumber}")
+    public ResponseEntity<BusinessLoanGuarantorResponse> getBusinessLoanGuarantor(@PathVariable String applicationNumber){
+        return ResponseEntity.ok(guarantorService.getBusinessLoanGuarantor(applicationNumber));
     }
 
     @DeleteMapping("/{id}")
