@@ -73,4 +73,9 @@ public class SalaryLoanApplicationController {
     public ResponseEntity<SalaryLoanApplicationResponse> returnSalaryLoanApplication(@PathVariable String applicationNumber, @RequestBody String reasonOfReturn){
         return ResponseEntity.ok(service.returnSalaryLoanApplication(applicationNumber,reasonOfReturn));
     }
+
+    @GetMapping("/{applicationNumber}")
+    public ResponseEntity<SalaryLoanApplicationResponse> getLoanApplication(@PathVariable String applicationNumber){
+        return ResponseEntity.ok(service.getLoanApplication(applicationNumber));
+    }
 }

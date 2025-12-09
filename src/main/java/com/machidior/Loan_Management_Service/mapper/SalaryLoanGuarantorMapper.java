@@ -40,6 +40,8 @@ public class SalaryLoanGuarantorMapper {
                 .email(guarantor.getEmail())
                 .occupation(guarantor.getOccupation())
                 .age(guarantor.getAge())
+                .passportUrl(guarantor.getPassportUrl())
+                .identificationCardUrl(guarantor.getIdentificationCardUrl())
                 .address(guarantor.getAddress())
                 .guarantee(guarantor.getGuarantee())
                 .guaranteeValue(guarantor.getGuaranteeValue())

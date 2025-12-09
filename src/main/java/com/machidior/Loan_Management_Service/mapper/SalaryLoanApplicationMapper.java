@@ -47,6 +47,7 @@ public class SalaryLoanApplicationMapper {
                 .status(application.getStatus())
                 .loanOfficerId(application.getLoanOfficerId())
                 .remarks(application.getRemarks())
+                .loanFeeRate(application.getLoanFeeRate())
                 .applicationFee(application.getApplicationFee())
                 .loanInsuranceFee(application.getLoanInsuranceFee())
                 .createdAt(application.getCreatedAt())
