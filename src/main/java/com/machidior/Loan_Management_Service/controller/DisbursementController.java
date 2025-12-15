@@ -1,5 +1,6 @@
 package com.machidior.Loan_Management_Service.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.machidior.Loan_Management_Service.dtos.DisbursementRequest;
 import com.machidior.Loan_Management_Service.dtos.DisbursementResponse;
 import com.machidior.Loan_Management_Service.service.DisbursementService;
@@ -17,7 +18,7 @@ public class DisbursementController {
     private final DisbursementService service;
 
     @PostMapping("/disburse/business")
-    public ResponseEntity<DisbursementResponse> disburseBusinessLoan(@RequestBody DisbursementRequest request){
+    public ResponseEntity<DisbursementResponse> disburseBusinessLoan(@RequestBody DisbursementRequest request) throws JsonProcessingException {
         return ResponseEntity.ok(service.disburseBusinessLoan(request));
     }
 

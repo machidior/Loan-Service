@@ -1,13 +1,16 @@
 package com.machidior.Loan_Management_Service.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.machidior.Loan_Management_Service.dtos.DisbursementRequest;
 import com.machidior.Loan_Management_Service.dtos.DisbursementResponse;
+import com.machidior.Loan_Management_Service.kafka.LoanDisbursedEventDTO;
 import com.machidior.Loan_Management_Service.dtos.RepaymentScheduleItemDTO;
 import com.machidior.Loan_Management_Service.enums.DisbursementStatus;
 import com.machidior.Loan_Management_Service.enums.InstallmentFrequency;
 import com.machidior.Loan_Management_Service.enums.LoanProductType;
 import com.machidior.Loan_Management_Service.enums.LoanStatus;
 import com.machidior.Loan_Management_Service.exception.ResourceNotFoundException;
+import com.machidior.Loan_Management_Service.kafka.LoanEventProducer;
 import com.machidior.Loan_Management_Service.mapper.DisbursementMapper;
 import com.machidior.Loan_Management_Service.mapper.RepaymentScheduleItemMapper;
 import com.machidior.Loan_Management_Service.model.*;
@@ -17,8 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,50 +35,65 @@ public class DisbursementService{
     private final DisbursementMapper mapper;
     private final RepaymentScheduleItemMapper repaymentScheduleItemMapper;
     private final RepaymentScheduleService repaymentScheduleService;
+    private final LoanEventProducer loanEventProducer;
 
-    public DisbursementResponse disburseBusinessLoan(DisbursementRequest request){
-        BusinessLoan businessLoan = businessLoanRepository.findById(request.getLoanId())
+    public DisbursementResponse disburseBusinessLoan(DisbursementRequest request) throws JsonProcessingException {
+        BusinessLoan loan = businessLoanRepository.findById(request.getLoanId())
                 .orElseThrow(() -> new ResourceNotFoundException("Business Loan with given loan id is not found!"));
 
-        if (businessLoan.getLoanContractUrl()==null){
+        if (loan.getLoanContractUrl()==null){
             throw new IllegalArgumentException("Loan contract is not uploaded!");
         }
-        if (businessLoan.getStatus() == LoanStatus.DISBURSED){
-            throw new IllegalArgumentException("Loan already disbursed!");
-        }
+//        if (loan.getStatus() == LoanStatus.DISBURSED){
+//            throw new IllegalArgumentException("Loan already disbursed!");
+//        }
 
         Disbursement disbursement = mapper.toEntity(request);
         disbursement.setLoanProductType(LoanProductType.BUSINESS_PRODUCT);
         disbursement.setDisbursedBy("manager");
-        disbursement.setAmountDisbursed(businessLoan.getPrincipal());
+        disbursement.setAmountDisbursed(loan.getPrincipal());
         disbursement.setStatus(DisbursementStatus.DISBURSED);
-        disbursement.setCustomerId(businessLoan.getCustomerId());
+        disbursement.setCustomerId(loan.getCustomerId());
 
         Disbursement savedDisbursement = disbursementRepository.save(disbursement);
 
-        BigDecimal principal = businessLoan.getPrincipal();
-        BigDecimal monthlyRate = businessLoan.getInterestRate().divide(BigDecimal.valueOf(100));
-        BigDecimal loanFeeRate = businessLoan.getLoanFeeRate().divide(BigDecimal.valueOf(100));
-        int termMonths = businessLoan.getTermMonths();
-        InstallmentFrequency frequency = businessLoan.getInstallmentFrequency();
+//        BigDecimal principal = businessLoan.getPrincipal();
+//        BigDecimal monthlyRate = businessLoan.getInterestRate().divide(BigDecimal.valueOf(100));
+//        BigDecimal loanFeeRate = businessLoan.getLoanFeeRate().divide(BigDecimal.valueOf(100));
+//        int termMonths = businessLoan.getTermMonths();
+//        InstallmentFrequency frequency = businessLoan.getInstallmentFrequency();
+//
+//        List<RepaymentScheduleItemDTO> scheduleItems = repaymentScheduleService.generateFlatSchedule(principal,monthlyRate,loanFeeRate,termMonths, savedDisbursement.getDisbursementDate(),frequency);
+//        RepaymentSchedule schedule = new RepaymentSchedule();
+//        schedule.setLoanId(businessLoan.getId());
+//        List<RepaymentScheduleItem> scheduleItem = scheduleItems.stream()
+//                .map(item -> repaymentScheduleItemMapper.toEntity(item,schedule))
+//                .toList();
+//        schedule.setScheduleItems(scheduleItem);
+//        repaymentScheduleRepository.save(schedule);
+//
+//        BigDecimal totalPayableAmount = BigDecimal.ZERO;
+//        for (RepaymentScheduleItemDTO item : scheduleItems) {
+//            totalPayableAmount = totalPayableAmount.add(item.getPaymentAmount());
+//        }
 
-        List<RepaymentScheduleItemDTO> scheduleItems = repaymentScheduleService.generateFlatSchedule(principal,monthlyRate,loanFeeRate,termMonths, savedDisbursement.getDisbursementDate(),frequency);
-        RepaymentSchedule schedule = new RepaymentSchedule();
-        schedule.setLoanId(businessLoan.getId());
-        List<RepaymentScheduleItem> scheduleItem = scheduleItems.stream()
-                .map(item -> repaymentScheduleItemMapper.toEntity(item,schedule))
-                .toList();
-        schedule.setScheduleItems(scheduleItem);
-        repaymentScheduleRepository.save(schedule);
+        loan.setStatus(LoanStatus.DISBURSED);
+        loan.setDisbursedOn( savedDisbursement.getDisbursementDate());
+        BusinessLoan businessLoan = businessLoanRepository.save(loan);
 
-        BigDecimal totalPayableAmount = BigDecimal.ZERO;
-        for (RepaymentScheduleItemDTO item : scheduleItems) {
-            totalPayableAmount = totalPayableAmount.add(item.getPaymentAmount());
-        }
-        businessLoan.setTotalPayableAmount(totalPayableAmount);
-        businessLoan.setStatus(LoanStatus.DISBURSED);
-        businessLoan.setDisbursedOn( savedDisbursement.getDisbursementDate());
-        businessLoanRepository.save(businessLoan);
+        LoanDisbursedEventDTO eventDTO = LoanDisbursedEventDTO.builder()
+                .loanId(businessLoan.getId())
+                .productType(businessLoan.getProductType())
+                .customerId(businessLoan.getCustomerId())
+                .principal(businessLoan.getPrincipal())
+                .interestRate(businessLoan.getInterestRate())
+                .loanFeeRate(businessLoan.getLoanFeeRate())
+                .installmentFrequency(businessLoan.getInstallmentFrequency())
+                .termMonths(businessLoan.getTermMonths())
+                .disbursedOn(businessLoan.getDisbursedOn())
+                .build();
+
+        loanEventProducer.sendLoanDisbursedEvent(eventDTO);
 
         return mapper.toResponse(savedDisbursement);
     }

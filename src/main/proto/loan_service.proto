@@ -1,0 +1,41 @@
+//syntax = "proto3";
+//
+//option java_multiple_files = true;
+//option java_package = "com.machidior.loan.grpc";
+//option java_outer_classname = "LoanServiceProto";
+//
+//service LoanService {
+//  rpc CreateLoan(CreateLoanRequest) returns (CreateLoanResponse);
+//  rpc GetLoan(GetLoanRequest) returns (GetLoanResponse);
+//}
+//
+//message CreateLoanRequest {
+//  string clientId = 1;
+//  double loanAmount = 2;
+//  int32 termMonths = 3;
+//}
+//
+//message CreateLoanResponse {
+//  string loanId = 1;
+//  string status = 2;
+//}
+//
+//message GetLoanRequest {
+//  string loanId = 1;
+//}
+//
+//message GetLoanResponse {
+//  string loanId = 1;
+//  string clientId = 2;
+//  double loanAmount = 3;
+//  int32 termMonths = 4;
+//}
+//
+//message CheckActiveLoanRequest {
+//  string customerId = 1;
+//}
+//
+//message CheckActiveLoanResponse {
+//  bool hasActiveLoan = 1;
+//}
+//
