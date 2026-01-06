@@ -1,5 +1,6 @@
 package com.machidior.Loan_Management_Service.mapper;
 
+
 import com.machidior.Loan_Management_Service.dtos.DisbursementRequest;
 import com.machidior.Loan_Management_Service.dtos.DisbursementResponse;
 import com.machidior.Loan_Management_Service.model.Disbursement;
@@ -23,7 +24,8 @@ public class DisbursementMapper {
         return DisbursementResponse.builder()
                 .id(disbursement.getId())
                 .loanId(disbursement.getLoanId())
-                .loanProductType(disbursement.getLoanProductType())
+                .productId(disbursement.getProductId())
+                .productName(disbursement.getProductName())
                 .customerId(disbursement.getCustomerId())
                 .accountNumber(disbursement.getAccountNumber())
                 .transactionReference(disbursement.getTransactionReference())

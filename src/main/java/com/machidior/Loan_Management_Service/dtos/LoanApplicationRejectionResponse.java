@@ -2,7 +2,6 @@ package com.machidior.Loan_Management_Service.dtos;
 
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter

@@ -4,8 +4,6 @@ import com.machidior.Loan_Management_Service.dtos.LoanApplicationReturnResponse;
 import com.machidior.Loan_Management_Service.model.LoanApplicationReturn;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-
 @Component
 public class LoanApplicationReturnMapper {
 

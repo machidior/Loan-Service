@@ -5,9 +5,8 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table
@@ -16,22 +15,25 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class JobDetails {
+public class GroupRequirement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String companyName;
-    private String companyLocation;
-    private String role;
+    private String groupName;
 
-    private String bankStatementUrl;
-    private String salarySlipUrl;
-    private String insuranceComprehensiveCoverUrl;
-    private String jobContractUrl;
-    private LocalDate employmentStartDate;
-    private BigDecimal netMonthlySalary;
+    private String groupRegistrationNumber;
+
+    private String groupRegistrationDocumentUrl;
+
+    private Integer totalGroupMembers;
+
+    private List<String> groupMemberList;
+
+    private String groupGuaranteeAgreementUrl;
+
+    private Integer meetingMinutes;
 
     @CreatedDate
     private LocalDateTime createdAt;

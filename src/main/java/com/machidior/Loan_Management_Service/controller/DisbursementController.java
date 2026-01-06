@@ -17,19 +17,9 @@ public class DisbursementController {
 
     private final DisbursementService service;
 
-    @PostMapping("/disburse/business")
-    public ResponseEntity<DisbursementResponse> disburseBusinessLoan(@RequestBody DisbursementRequest request) throws JsonProcessingException {
-        return ResponseEntity.ok(service.disburseBusinessLoan(request));
-    }
-
-    @PostMapping("/disburse/salary")
-    public ResponseEntity<DisbursementResponse> disburseSalaryLoan(@RequestBody DisbursementRequest request){
-        return ResponseEntity.ok(service.disburseSalaryLoan(request));
-    }
-
-    @PostMapping("/disburse/kuza")
-    public ResponseEntity<DisbursementResponse> disburseKuzaLoan(@RequestBody DisbursementRequest request){
-        return ResponseEntity.ok(service.disburseKuzaLoan(request));
+    @PostMapping("/disburse")
+    public ResponseEntity<DisbursementResponse> disburseLoan(@RequestBody DisbursementRequest request) throws JsonProcessingException {
+        return ResponseEntity.ok(service.disburseLoan(request));
     }
 
     @GetMapping("/loan-id/{loanId}")

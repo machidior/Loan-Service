@@ -1,6 +1,5 @@
 package com.machidior.Loan_Management_Service.service;
 
-import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

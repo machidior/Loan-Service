@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,7 +19,8 @@ public class DisbursementResponse {
     private Long id;
     private String loanId;
     private String customerId;
-    private LoanProductType loanProductType;
+    private Long productId;
+    private String productName;
     private String accountNumber;
     private BigDecimal amountDisbursed;
     private String disbursementMethod;

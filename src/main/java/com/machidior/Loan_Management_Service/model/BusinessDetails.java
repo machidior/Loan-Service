@@ -3,10 +3,12 @@ package com.machidior.Loan_Management_Service.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "business_details")
@@ -20,20 +22,22 @@ public class BusinessDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String businessName;
-    private String businessType;
-    private String businessAddress;
-    private String businessSector;
-    private Integer yearsInOperation;
     private String tinNumber;
+    private String bankStatementUrl;
+    private String insuranceComprehensiveCoverUrl;
+    private String businessLicenseUrl;
+    private String tinCertificateUrl;
+    private String brelaCertificateUrl;
+    private String cashFlowStatementUrl;
+    private String ownershipType;
+    private LocalDate startDate;
 
-    @CreationTimestamp
+    @CreatedDate
     private LocalDateTime createdAt;
-    @UpdateTimestamp
+    @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "loan_application_number", referencedColumnName = "applicationNumber")
-    @JsonIgnore
-    private BusinessLoanApplication businessLoanApplication;
+    @OneToMany(mappedBy = "businessDetails", cascade = CascadeType.ALL)
+    private List<Business> businesses;
+
 }

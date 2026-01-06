@@ -5,8 +5,6 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,22 +14,17 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class JobDetails {
+public class FinancialHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String companyName;
-    private String companyLocation;
-    private String role;
+    private String bankStatementsUrl;
 
-    private String bankStatementUrl;
-    private String salarySlipUrl;
-    private String insuranceComprehensiveCoverUrl;
-    private String jobContractUrl;
-    private LocalDate employmentStartDate;
-    private BigDecimal netMonthlySalary;
+    private String creditBureauReportUrl;
+
+    private String declaredMonthlyExpensesUrl;
 
     @CreatedDate
     private LocalDateTime createdAt;

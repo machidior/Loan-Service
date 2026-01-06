@@ -5,7 +5,6 @@ import com.machidior.Loan_Management_Service.repo.ApplicationNumberSequenceRepos
 import com.machidior.Loan_Management_Service.util.ApplicationNumberSequence;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
-import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.time.LocalDate;

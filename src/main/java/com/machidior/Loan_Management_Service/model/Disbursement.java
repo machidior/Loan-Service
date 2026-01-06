@@ -1,11 +1,10 @@
 package com.machidior.Loan_Management_Service.model;
 
 import com.machidior.Loan_Management_Service.enums.DisbursementStatus;
-import com.machidior.Loan_Management_Service.enums.LoanProductType;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,8 +24,8 @@ public class Disbursement {
     private Long id;
     private String loanId;
     private String customerId;
-    @Enumerated(EnumType.STRING)
-    private LoanProductType loanProductType;
+    private Long productId;
+    private String productName;
     private String accountNumber;
     private BigDecimal amountDisbursed;
     private String disbursementMethod;
@@ -36,9 +35,9 @@ public class Disbursement {
     private LocalDate disbursementDate;
     private String disbursedBy;
     private String remarks;
-    @CreationTimestamp
+    @CreatedDate
     private LocalDateTime createdAt;
-    @UpdateTimestamp
+    @LastModifiedDate
     private LocalDateTime modifiedAt;
     
 }

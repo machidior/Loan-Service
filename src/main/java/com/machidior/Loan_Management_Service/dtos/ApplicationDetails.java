@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 @Builder
 public class ApplicationDetails {
 
+    private Long productId;
+    private String productName;
     private String customerId;
     private BigDecimal amountRequested;
     private Integer termMonths;
