@@ -1,6 +1,6 @@
 package com.machidior.Loan_Management_Service.mapper;
 
-import com.machidior.Loan_Management_Service.dtos.LoanApplicationReturnResponse;
+import com.machidior.Loan_Management_Service.dtos.response.LoanApplicationReturnResponse;
 import com.machidior.Loan_Management_Service.model.LoanApplicationReturn;
 import org.springframework.stereotype.Component;
 

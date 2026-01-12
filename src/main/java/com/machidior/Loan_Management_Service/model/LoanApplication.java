@@ -34,6 +34,7 @@ public class LoanApplication {
     private String customerId;
     private String loanOfficerId;
     private Long productId;
+    private Long productVersionId;
     private String productName;
 
     @Column(nullable = false)
@@ -60,17 +61,20 @@ public class LoanApplication {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @OneToOne(mappedBy = "loanApplication", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Guarantor guarantor;
+    @OneToMany(mappedBy = "loanApplication", cascade = CascadeType.ALL)
+    private List<Guarantor> guarantors;
 
     @OneToMany(mappedBy = "loanApplication", cascade = CascadeType.ALL)
     private List<Collateral> collaterals;
 
 
     @OneToOne(cascade = CascadeType.ALL)
-    private JobDetails jobDetails;
+    private EmploymentDetails employmentDetails;
 
     @OneToOne(cascade = CascadeType.ALL)
     private BusinessDetails businessDetails;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private AgricultureRequirementDetails agricultureRequirementDetails;
 
 }

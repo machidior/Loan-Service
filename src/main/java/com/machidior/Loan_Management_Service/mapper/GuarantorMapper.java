@@ -1,7 +1,7 @@
 package com.machidior.Loan_Management_Service.mapper;
 
-import com.machidior.Loan_Management_Service.dtos.GuarantorRequest;
-import com.machidior.Loan_Management_Service.dtos.GuarantorResponse;
+import com.machidior.Loan_Management_Service.dtos.request.GuarantorRequest;
+import com.machidior.Loan_Management_Service.dtos.response.GuarantorResponse;
 import com.machidior.Loan_Management_Service.enums.Gender;
 import com.machidior.Loan_Management_Service.model.Guarantor;
 import com.machidior.Loan_Management_Service.model.LoanApplication;
@@ -22,7 +22,7 @@ public class GuarantorMapper {
                 .age(request.getAge())
                 .address(request.getAddress())
                 .guarantee(request.getGuarantee())
-                .GuaranteeValue(request.getGuaranteeValue())
+                .guaranteeValue(request.getGuaranteeValue())
                 .approved(false)
                 .loanApplication(application)
                 .build();
@@ -42,8 +42,10 @@ public class GuarantorMapper {
                 .address(guarantor.getAddress())
                 .passportUrl(guarantor.getPassportUrl())
                 .identificationCardUrl(guarantor.getIdentificationCardUrl())
+                .guarantorConsentUrl(guarantor.getGuarantorConsentUrl())
+                .incomeProofUrl(guarantor.getIncomeProofUrl())
                 .guarantee(guarantor.getGuarantee())
-                .GuaranteeValue(guarantor.getGuaranteeValue())
+                .guaranteeValue(guarantor.getGuaranteeValue())
                 .approved(guarantor.isApproved())
                 .applicationNumber(
                         guarantor.getLoanApplication() != null

@@ -1,7 +1,7 @@
 package com.machidior.Loan_Management_Service.mapper;
 
-import com.machidior.Loan_Management_Service.dtos.ApplicationDetails;
-import com.machidior.Loan_Management_Service.dtos.LoanApplicationResponse;
+import com.machidior.Loan_Management_Service.dtos.request.ApplicationDetails;
+import com.machidior.Loan_Management_Service.dtos.response.LoanApplicationResponse;
 import com.machidior.Loan_Management_Service.model.LoanApplication;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -55,11 +55,14 @@ public class LoanApplicationMapper {
                         .map(collateralMapper::toResponse)
                         .collect(Collectors.toList())
                         : null)
-                .guarantor(application.getGuarantor() != null
-                        ? guarantorMapper.toResponse(application.getGuarantor())
+                .guarantors(application.getGuarantors() != null
+                        ? application.getGuarantors().stream()
+                        .map(guarantorMapper::toResponse)
+                        .collect(Collectors.toList())
                         : null)
                 .businessDetails(application.getBusinessDetails())
-                .jobDetails(application.getJobDetails())
+                .employmentDetails(application.getEmploymentDetails())
+                .agricultureRequirementDetails(application.getAgricultureRequirementDetails())
                 .build();
     }
 }

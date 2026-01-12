@@ -1,7 +1,7 @@
 package com.machidior.Loan_Management_Service.mapper;
 
-import com.machidior.Loan_Management_Service.dtos.BusinessRequest;
-import com.machidior.Loan_Management_Service.dtos.BusinessResponse;
+import com.machidior.Loan_Management_Service.dtos.request.BusinessRequest;
+import com.machidior.Loan_Management_Service.dtos.response.BusinessResponse;
 import com.machidior.Loan_Management_Service.model.Business;
 import com.machidior.Loan_Management_Service.model.BusinessDetails;
 import org.springframework.stereotype.Component;

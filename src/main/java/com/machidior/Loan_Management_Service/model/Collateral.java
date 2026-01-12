@@ -35,7 +35,7 @@ public class Collateral {
     private CollateralPurchaseCondition purchaseCondition;
 
     private String ownershipProofUrl;
-    private String insuranceUrl;
+    private String insuranceDocumentUrl;
     private String photoUrl;
 
     @Enumerated(EnumType.STRING)
@@ -52,7 +52,7 @@ public class Collateral {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "loan_application_number")
     private LoanApplication loanApplication;
 }

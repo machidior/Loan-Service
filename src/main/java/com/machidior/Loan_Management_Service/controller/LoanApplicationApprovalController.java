@@ -1,6 +1,6 @@
 package com.machidior.Loan_Management_Service.controller;
 
-import com.machidior.Loan_Management_Service.dtos.LoanApplicationApprovalResponse;
+import com.machidior.Loan_Management_Service.dtos.response.LoanApplicationApprovalResponse;
 import com.machidior.Loan_Management_Service.service.LoanApplicationApprovalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

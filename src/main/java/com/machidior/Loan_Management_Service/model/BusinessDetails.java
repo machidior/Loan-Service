@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,7 +24,6 @@ public class BusinessDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String tinNumber;
-    private String bankStatementUrl;
     private String insuranceComprehensiveCoverUrl;
     private String businessLicenseUrl;
     private String tinCertificateUrl;
@@ -31,6 +31,7 @@ public class BusinessDetails {
     private String cashFlowStatementUrl;
     private String ownershipType;
     private LocalDate startDate;
+    private BigDecimal averageMonthlyTurnover;
 
     @CreatedDate
     private LocalDateTime createdAt;

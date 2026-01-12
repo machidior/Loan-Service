@@ -1,6 +1,6 @@
 package com.machidior.Loan_Management_Service.service;
 
-import com.machidior.Loan_Management_Service.dtos.LoanApplicationRejectionResponse;
+import com.machidior.Loan_Management_Service.dtos.response.LoanApplicationRejectionResponse;
 import com.machidior.Loan_Management_Service.exception.ResourceNotFoundException;
 import com.machidior.Loan_Management_Service.mapper.LoanApplicationRejectionMapper;
 import com.machidior.Loan_Management_Service.model.LoanApplicationRejection;

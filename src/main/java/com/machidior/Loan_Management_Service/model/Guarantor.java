@@ -34,11 +34,12 @@ public class Guarantor {
     private Integer age;
     private String address;
     private String guarantee;
-    private BigDecimal GuaranteeValue;
+    private BigDecimal guaranteeValue;
 
     private String passportUrl;
     private String identificationCardUrl;
     private String guarantorConsentUrl;
+    private String incomeProofUrl;
 
     private boolean approved;
 

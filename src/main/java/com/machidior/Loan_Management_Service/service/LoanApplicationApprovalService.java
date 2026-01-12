@@ -1,6 +1,6 @@
 package com.machidior.Loan_Management_Service.service;
 
-import com.machidior.Loan_Management_Service.dtos.LoanApplicationApprovalResponse;
+import com.machidior.Loan_Management_Service.dtos.response.LoanApplicationApprovalResponse;
 import com.machidior.Loan_Management_Service.mapper.LoanApplicationApprovalMapper;
 import com.machidior.Loan_Management_Service.repo.LoanApplicationApprovalRepository;
 import lombok.RequiredArgsConstructor;

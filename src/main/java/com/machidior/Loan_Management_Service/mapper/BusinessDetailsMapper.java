@@ -1,7 +1,9 @@
 package com.machidior.Loan_Management_Service.mapper;
 
-import com.machidior.Loan_Management_Service.dtos.BusinessDetailsRequest;
-import com.machidior.Loan_Management_Service.dtos.BusinessDetailsResponse;
+import com.machidior.Loan_Management_Service.dtos.request.BusinessDetailsRequest;
+import com.machidior.Loan_Management_Service.dtos.response.BusinessDetailsResponse;
+import com.machidior.Loan_Management_Service.evaluator.data.BusinessApplicationData;
+import com.machidior.Loan_Management_Service.model.Business;
 import com.machidior.Loan_Management_Service.model.BusinessDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,6 +19,7 @@ public class BusinessDetailsMapper {
     public BusinessDetails toEntity(BusinessDetailsRequest request) {
         BusinessDetails businessDetails = new BusinessDetails();
         businessDetails.setTinNumber(request.getTinNumber());
+        businessDetails.setAverageMonthlyTurnover(request.getAverageMonthlyTurnover());
         businessDetails.setBusinesses(
                 request.getBusinessList() != null ?
                         request.getBusinessList().stream()
@@ -32,11 +35,12 @@ public class BusinessDetailsMapper {
         return BusinessDetailsResponse.builder()
                 .id(businessDetails.getId())
                 .tinNumber(businessDetails.getTinNumber())
-                .bankStatementUrl(businessDetails.getBankStatementUrl())
+                .averageMonthlyTurnOver(businessDetails.getAverageMonthlyTurnover())
                 .insuranceComprehensiveCoverUrl(businessDetails.getInsuranceComprehensiveCoverUrl())
                 .businessLicenseUrl(businessDetails.getBusinessLicenseUrl())
                 .tinCertificateUrl(businessDetails.getTinCertificateUrl())
                 .brelaCertificateUrl(businessDetails.getBrelaCertificateUrl())
+                .cashFlowStatementUrl(businessDetails.getCashFlowStatementUrl())
                 .businesses(businessDetails.getBusinesses() != null ?
                         businessDetails.getBusinesses().stream()
                                 .map(businessMapper::toResponse)
@@ -45,5 +49,6 @@ public class BusinessDetailsMapper {
                 .updatedAt(businessDetails.getUpdatedAt())
                 .build();
     }
+
 }
 

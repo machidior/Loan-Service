@@ -1,8 +1,8 @@
 package com.machidior.Loan_Management_Service.mapper;
 
 
-import com.machidior.Loan_Management_Service.dtos.DisbursementRequest;
-import com.machidior.Loan_Management_Service.dtos.DisbursementResponse;
+import com.machidior.Loan_Management_Service.dtos.request.DisbursementRequest;
+import com.machidior.Loan_Management_Service.dtos.response.DisbursementResponse;
 import com.machidior.Loan_Management_Service.model.Disbursement;
 import org.springframework.stereotype.Component;
 

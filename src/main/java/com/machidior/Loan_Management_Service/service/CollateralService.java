@@ -1,12 +1,11 @@
 package com.machidior.Loan_Management_Service.service;
 
-import com.machidior.Loan_Management_Service.dtos.CollateralResponse;
+import com.machidior.Loan_Management_Service.dtos.response.CollateralResponse;
 import com.machidior.Loan_Management_Service.exception.ResourceNotFoundException;
 import com.machidior.Loan_Management_Service.mapper.CollateralMapper;
 import com.machidior.Loan_Management_Service.model.LoanApplication;
 import com.machidior.Loan_Management_Service.repo.CollateralRepository;
 import com.machidior.Loan_Management_Service.repo.LoanApplicationRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

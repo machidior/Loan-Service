@@ -1,7 +1,7 @@
 package com.machidior.Loan_Management_Service.mapper;
 
-import com.machidior.Loan_Management_Service.dtos.CollateralRequest;
-import com.machidior.Loan_Management_Service.dtos.CollateralResponse;
+import com.machidior.Loan_Management_Service.dtos.request.CollateralRequest;
+import com.machidior.Loan_Management_Service.dtos.response.CollateralResponse;
 import com.machidior.Loan_Management_Service.enums.CollateralCondition;
 import com.machidior.Loan_Management_Service.enums.CollateralPurchaseCondition;
 import com.machidior.Loan_Management_Service.enums.CollateralType;
@@ -39,6 +39,8 @@ public class CollateralMapper {
                 .purchaseCondition(collateral.getPurchaseCondition())
                 .condition(collateral.getCondition())
                 .photoUrl(collateral.getPhotoUrl())
+                .ownershipProofUrl(collateral.getOwnershipProofUrl())
+                .insuranceDocumentUrl(collateral.getInsuranceDocumentUrl())
                 .purchaseDate(collateral.getPurchaseDate())
                 .quantity(collateral.getQuantity())
                 .purchasingValue(collateral.getPurchasingValue())

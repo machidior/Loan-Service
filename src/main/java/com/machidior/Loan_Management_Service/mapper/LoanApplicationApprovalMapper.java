@@ -1,8 +1,8 @@
 package com.machidior.Loan_Management_Service.mapper;
 
 
-import com.machidior.Loan_Management_Service.dtos.LoanApplicationApprovalRequest;
-import com.machidior.Loan_Management_Service.dtos.LoanApplicationApprovalResponse;
+import com.machidior.Loan_Management_Service.dtos.request.LoanApplicationApprovalRequest;
+import com.machidior.Loan_Management_Service.dtos.response.LoanApplicationApprovalResponse;
 import com.machidior.Loan_Management_Service.model.LoanApplicationApproval;
 import org.springframework.stereotype.Component;
 
