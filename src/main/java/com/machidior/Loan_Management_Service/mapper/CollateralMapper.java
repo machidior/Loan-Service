@@ -5,7 +5,7 @@ import com.machidior.Loan_Management_Service.dtos.response.CollateralResponse;
 import com.machidior.Loan_Management_Service.enums.CollateralCondition;
 import com.machidior.Loan_Management_Service.enums.CollateralPurchaseCondition;
 import com.machidior.Loan_Management_Service.enums.CollateralType;
-import com.machidior.Loan_Management_Service.model.Collateral;
+import com.machidior.Loan_Management_Service.model.requirement.Collateral;
 import com.machidior.Loan_Management_Service.model.LoanApplication;
 import org.springframework.stereotype.Component;
 

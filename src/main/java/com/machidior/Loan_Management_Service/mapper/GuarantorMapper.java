@@ -3,7 +3,7 @@ package com.machidior.Loan_Management_Service.mapper;
 import com.machidior.Loan_Management_Service.dtos.request.GuarantorRequest;
 import com.machidior.Loan_Management_Service.dtos.response.GuarantorResponse;
 import com.machidior.Loan_Management_Service.enums.Gender;
-import com.machidior.Loan_Management_Service.model.Guarantor;
+import com.machidior.Loan_Management_Service.model.requirement.Guarantor;
 import com.machidior.Loan_Management_Service.model.LoanApplication;
 import org.springframework.stereotype.Component;
 

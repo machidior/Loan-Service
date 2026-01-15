@@ -2,6 +2,8 @@ package com.machidior.Loan_Management_Service.model;
 
 import com.machidior.Loan_Management_Service.enums.InstallmentFrequency;
 import com.machidior.Loan_Management_Service.enums.LoanApplicationStatus;
+import com.machidior.Loan_Management_Service.enums.TenureUnit;
+import com.machidior.Loan_Management_Service.model.requirement.*;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -36,21 +38,21 @@ public class LoanApplication {
     private Long productId;
     private Long productVersionId;
     private String productName;
+    private String productCode;
 
     @Column(nullable = false)
     private BigDecimal amountRequested;
     private BigDecimal amountApproved;
     private BigDecimal interestRate;
-    @Column(name = "loan_fee_rate")
-    private BigDecimal loanFeeRate;
-    private Integer termMonths;
+    private Integer termTenure;
+    private TenureUnit tenureUnit;
     @Enumerated(EnumType.STRING)
     private InstallmentFrequency installmentFrequency;
     @Enumerated(EnumType.STRING)
     private LoanApplicationStatus status;
 
-    private BigDecimal applicationFee;
-    private BigDecimal loanInsuranceFee;
+    @OneToMany(mappedBy = "loanApplication", cascade = CascadeType.ALL)
+    private List<OnApplicationCharge> charges;
 
     private Boolean isRead;
     private String purpose;
@@ -61,20 +63,5 @@ public class LoanApplication {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "loanApplication", cascade = CascadeType.ALL)
-    private List<Guarantor> guarantors;
-
-    @OneToMany(mappedBy = "loanApplication", cascade = CascadeType.ALL)
-    private List<Collateral> collaterals;
-
-
-    @OneToOne(cascade = CascadeType.ALL)
-    private EmploymentDetails employmentDetails;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    private BusinessDetails businessDetails;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    private AgricultureRequirementDetails agricultureRequirementDetails;
 
 }

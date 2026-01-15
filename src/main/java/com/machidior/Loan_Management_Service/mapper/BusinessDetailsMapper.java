@@ -2,9 +2,8 @@ package com.machidior.Loan_Management_Service.mapper;
 
 import com.machidior.Loan_Management_Service.dtos.request.BusinessDetailsRequest;
 import com.machidior.Loan_Management_Service.dtos.response.BusinessDetailsResponse;
-import com.machidior.Loan_Management_Service.evaluator.data.BusinessApplicationData;
-import com.machidior.Loan_Management_Service.model.Business;
-import com.machidior.Loan_Management_Service.model.BusinessDetails;
+import com.machidior.Loan_Management_Service.model.LoanApplication;
+import com.machidior.Loan_Management_Service.model.requirement.BusinessDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +15,7 @@ public class BusinessDetailsMapper {
 
     private final BusinessMapper businessMapper;
 
-    public BusinessDetails toEntity(BusinessDetailsRequest request) {
+    public BusinessDetails toEntity(BusinessDetailsRequest request, LoanApplication application) {
         BusinessDetails businessDetails = new BusinessDetails();
         businessDetails.setTinNumber(request.getTinNumber());
         businessDetails.setAverageMonthlyTurnover(request.getAverageMonthlyTurnover());
@@ -26,7 +25,7 @@ public class BusinessDetailsMapper {
                                 .map(business -> businessMapper.toEntity(business, businessDetails))
                                 .collect(Collectors.toList()) : null
         );
-
+        businessDetails.setLoanApplication(application);
         return businessDetails;
     }
 

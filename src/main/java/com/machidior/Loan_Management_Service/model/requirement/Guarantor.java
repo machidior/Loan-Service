@@ -1,6 +1,7 @@
-package com.machidior.Loan_Management_Service.model;
+package com.machidior.Loan_Management_Service.model.requirement;
 
 import com.machidior.Loan_Management_Service.enums.Gender;
+import com.machidior.Loan_Management_Service.model.LoanApplication;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

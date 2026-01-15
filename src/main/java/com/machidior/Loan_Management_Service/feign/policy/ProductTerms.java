@@ -7,6 +7,7 @@ import com.machidior.Loan_Management_Service.enums.TenureUnit;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,7 +30,7 @@ public class ProductTerms {
 
     private TenureUnit tenureUnit;
 
-    private InstallmentFrequency installmentFrequency;
+    private List<InstallmentFrequency> allowedInstallmentFrequencies;
 
     private Integer minInstallments;
     private Integer maxInstallments;

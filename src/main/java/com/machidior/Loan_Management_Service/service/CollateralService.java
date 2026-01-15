@@ -1,38 +1,25 @@
 package com.machidior.Loan_Management_Service.service;
 
+import com.machidior.Loan_Management_Service.dtos.request.CollateralRequest;
 import com.machidior.Loan_Management_Service.dtos.response.CollateralResponse;
-import com.machidior.Loan_Management_Service.exception.ResourceNotFoundException;
-import com.machidior.Loan_Management_Service.mapper.CollateralMapper;
-import com.machidior.Loan_Management_Service.model.LoanApplication;
-import com.machidior.Loan_Management_Service.repo.CollateralRepository;
-import com.machidior.Loan_Management_Service.repo.LoanApplicationRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.machidior.Loan_Management_Service.dtos.response.RequirementSubmissionResponse;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Service
-@RequiredArgsConstructor
-public class CollateralService {
+public interface CollateralService {
+    @Transactional
+    RequirementSubmissionResponse saveCollaterals(
+            String applicationNumber,
+            List<CollateralRequest> collateralRequests,
+            List<MultipartFile> photos,
+            List<MultipartFile> ownershipProofs,
+            List<MultipartFile> insuranceDocuments
+    ) throws IOException;
 
-    private final CollateralRepository repository;
-    private final LoanApplicationRepository loanApplicationRepository;
-    private final CollateralMapper mapper;
+    List<CollateralResponse> getLoanCollaterals(String applicationNumber);
 
-    public List<CollateralResponse> getLoanCollaterals(String applicationNumber){
-        LoanApplication application = loanApplicationRepository.findById(applicationNumber)
-                .orElseThrow(()-> new ResourceNotFoundException("Loan Application not found!"));
-        return repository.findByLoanApplication(application)
-                .stream()
-                .map(mapper::toResponse)
-                .collect(Collectors.toList());
-    }
-
-    public void deleteCollateral(Long id) {
-        if (!repository.existsById(id)) {
-            throw new ResourceNotFoundException("Collateral not found with id: " + id);
-        }
-        repository.deleteById(id);
-    }
+    void deleteCollateral(Long id);
 }

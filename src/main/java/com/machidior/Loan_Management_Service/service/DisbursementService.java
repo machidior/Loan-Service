@@ -60,9 +60,7 @@ public class DisbursementService {
                 .customerId(disbursedLoan.getCustomerId())
                 .principal(disbursedLoan.getPrincipal())
                 .interestRate(disbursedLoan.getInterestRate())
-                .loanFeeRate(disbursedLoan.getLoanFeeRate())
                 .installmentFrequency(disbursedLoan.getInstallmentFrequency())
-                .termMonths(disbursedLoan.getTermMonths())
                 .disbursedOn(disbursedLoan.getDisbursedOn())
                 .build();
 

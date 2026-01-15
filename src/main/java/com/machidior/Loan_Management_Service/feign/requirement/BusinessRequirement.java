@@ -1,5 +1,6 @@
 package com.machidior.Loan_Management_Service.feign.requirement;
 
+import com.machidior.Loan_Management_Service.completion.ProductRequirementConfig;
 import com.machidior.Loan_Management_Service.enums.RequirementType;
 import lombok.*;
 
@@ -10,7 +11,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BusinessRequirement {
+public class BusinessRequirement implements ProductRequirementConfig {
 
     private Long id;
     private RequirementType type;

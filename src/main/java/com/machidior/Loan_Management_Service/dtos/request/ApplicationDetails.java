@@ -13,10 +13,12 @@ import java.math.BigDecimal;
 public class ApplicationDetails {
 
     private Long productId;
+    private Long productVersionId;
+    private String productCode;
     private String productName;
     private String customerId;
     private BigDecimal amountRequested;
-    private Integer termMonths;
+    private Integer termTenure;
     private InstallmentFrequency installmentFrequency;
     private String purpose;
     private String loanOfficerId;

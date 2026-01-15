@@ -1,6 +1,6 @@
-package com.machidior.Loan_Management_Service.model;
+package com.machidior.Loan_Management_Service.model.requirement;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.machidior.Loan_Management_Service.model.LoanApplication;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -40,5 +40,8 @@ public class BusinessDetails {
 
     @OneToMany(mappedBy = "businessDetails", cascade = CascadeType.ALL)
     private List<Business> businesses;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private LoanApplication loanApplication;
 
 }

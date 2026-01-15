@@ -3,7 +3,7 @@ package com.machidior.Loan_Management_Service.mapper;
 import com.machidior.Loan_Management_Service.dtos.request.AgricultureApplicationRequest;
 import com.machidior.Loan_Management_Service.enums.RequirementType;
 import com.machidior.Loan_Management_Service.evaluator.data.AgricultureRequirementData;
-import com.machidior.Loan_Management_Service.model.AgricultureRequirementDetails;
+import com.machidior.Loan_Management_Service.model.requirement.AgricultureRequirementDetails;
 import org.springframework.stereotype.Component;
 
 @Component

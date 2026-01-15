@@ -2,9 +2,11 @@ package com.machidior.Loan_Management_Service.dtos.response;
 
 import com.machidior.Loan_Management_Service.enums.InstallmentFrequency;
 import com.machidior.Loan_Management_Service.enums.LoanApplicationStatus;
-import com.machidior.Loan_Management_Service.model.AgricultureRequirementDetails;
-import com.machidior.Loan_Management_Service.model.BusinessDetails;
-import com.machidior.Loan_Management_Service.model.EmploymentDetails;
+import com.machidior.Loan_Management_Service.enums.TenureUnit;
+import com.machidior.Loan_Management_Service.model.OnApplicationCharge;
+import com.machidior.Loan_Management_Service.model.requirement.AgricultureRequirementDetails;
+import com.machidior.Loan_Management_Service.model.requirement.BusinessDetails;
+import com.machidior.Loan_Management_Service.model.requirement.EmploymentDetails;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -23,19 +25,19 @@ public class LoanApplicationResponse {
     private String customerId;
     private String loanOfficerId;
     private Long productId;
+    private Long productVersionId;
     private String productName;
+    private String productCode;
 
     private BigDecimal amountRequested;
     private BigDecimal amountApproved;
     private BigDecimal interestRate;
-    private BigDecimal loanFeeRate;
-    private Integer termMonths;
+    private Integer termTenure;
+    private TenureUnit tenureUnit;
     private InstallmentFrequency installmentFrequency;
     private LoanApplicationStatus status;
 
-    private BigDecimal applicationFee;
-    private BigDecimal loanInsuranceFee;
-
+    private List<OnApplicationCharge> charges;
     private Boolean isRead;
     private String purpose;
     private String remarks;

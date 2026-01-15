@@ -1,5 +1,6 @@
 package com.machidior.Loan_Management_Service.feign.requirement;
 
+import com.machidior.Loan_Management_Service.completion.ProductRequirementConfig;
 import com.machidior.Loan_Management_Service.enums.RequirementType;
 import lombok.*;
 
@@ -8,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AgricultureRequirement {
+public class AgricultureRequirement implements ProductRequirementConfig {
 
     private Long id;
     private RequirementType type;
@@ -21,4 +22,6 @@ public class AgricultureRequirement {
     private Boolean farmInspectionRequired;
 
     private Integer minFarmSize;
+
+
 }

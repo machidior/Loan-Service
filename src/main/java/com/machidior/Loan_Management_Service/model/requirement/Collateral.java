@@ -1,8 +1,9 @@
-package com.machidior.Loan_Management_Service.model;
+package com.machidior.Loan_Management_Service.model.requirement;
 
 import com.machidior.Loan_Management_Service.enums.CollateralCondition;
 import com.machidior.Loan_Management_Service.enums.CollateralPurchaseCondition;
 import com.machidior.Loan_Management_Service.enums.CollateralType;
+import com.machidior.Loan_Management_Service.model.LoanApplication;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -52,7 +53,7 @@ public class Collateral {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "loan_application_number")
     private LoanApplication loanApplication;
 }

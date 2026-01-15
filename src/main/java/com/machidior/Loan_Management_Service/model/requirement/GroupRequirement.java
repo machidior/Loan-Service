@@ -1,4 +1,4 @@
-package com.machidior.Loan_Management_Service.model;
+package com.machidior.Loan_Management_Service.model.requirement;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table
@@ -14,17 +15,25 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class FinancialHistory {
+public class GroupRequirement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String bankStatementsUrl;
+    private String groupName;
 
-    private String creditBureauReportUrl;
+    private String groupRegistrationNumber;
 
-    private String declaredMonthlyExpensesUrl;
+    private String groupRegistrationDocumentUrl;
+
+    private Integer totalGroupMembers;
+
+    private List<String> groupMemberList;
+
+    private String groupGuaranteeAgreementUrl;
+
+    private Integer meetingMinutes;
 
     @CreatedDate
     private LocalDateTime createdAt;

@@ -1,4 +1,4 @@
-package com.machidior.Loan_Management_Service.model;
+package com.machidior.Loan_Management_Service.model.requirement;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

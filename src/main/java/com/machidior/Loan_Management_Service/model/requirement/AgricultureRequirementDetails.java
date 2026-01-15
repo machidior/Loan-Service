@@ -1,7 +1,8 @@
-package com.machidior.Loan_Management_Service.model;
+package com.machidior.Loan_Management_Service.model.requirement;
 
 import com.machidior.Loan_Management_Service.enums.RequirementStatus;
 import com.machidior.Loan_Management_Service.enums.RequirementType;
+import com.machidior.Loan_Management_Service.model.LoanApplication;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,18 +38,15 @@ public class AgricultureRequirementDetails {
     private BigDecimal expectedYield;
     private String yieldUnit;
 
-    // ---------- OFF-TAKER ----------
     private Boolean hasOffTaker;
     private String offTakerName;
     private String offTakerContractRef;
 
-    // ---------- INSPECTION ----------
     private Boolean farmInspected;
     private LocalDate inspectionDate;
     private String inspectorName;
     private String inspectionRemarks;
 
-    // ---------- DOCUMENTS ----------
     private Boolean farmDetailsProvided;
     private Boolean productionCycleProvided;
     private Boolean offTakerAgreementProvided;
@@ -57,4 +55,7 @@ public class AgricultureRequirementDetails {
     private RequirementStatus status;
 
     private String rejectionReason;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private LoanApplication loanApplication;
 }

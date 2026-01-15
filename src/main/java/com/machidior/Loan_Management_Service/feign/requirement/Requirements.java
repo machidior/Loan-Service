@@ -20,9 +20,9 @@ public class Requirements {
     private FinancialHistoryRequirement financialHistoryRequirement;
     private HousingRequirement housingRequirement;
 
-
+}
 
 //    private IdentityRequirementResponse identityRequirement;
 //    private LegalRequirementResponse legalRequirement;
 //    private ReferencesRequirementResponse referencesRequirement;
-}
+

@@ -7,7 +7,7 @@ import java.util.Set;
 
 public enum LoanApplicationStatus {
     DRAFTED,
-    PENDING,
+    SUBMITTED,
     UNDER_REVIEW,
     APPROVED,
     RETURNED,
@@ -16,10 +16,10 @@ public enum LoanApplicationStatus {
     private Set<LoanApplicationStatus> allowedTransitions;
 
     static {
-        DRAFTED.allowedTransitions = EnumSet.of(PENDING);
-        PENDING.allowedTransitions = EnumSet.of(UNDER_REVIEW, APPROVED, RETURNED, REJECTED);
+        DRAFTED.allowedTransitions = EnumSet.of(SUBMITTED);
+        SUBMITTED.allowedTransitions = EnumSet.of(UNDER_REVIEW, APPROVED, RETURNED, REJECTED);
         UNDER_REVIEW.allowedTransitions = EnumSet.of(APPROVED, RETURNED, REJECTED);
-        RETURNED.allowedTransitions = EnumSet.of(DRAFTED, PENDING);
+        RETURNED.allowedTransitions = EnumSet.of(DRAFTED, SUBMITTED);
     }
 
     public boolean canTransitionTo(LoanApplicationStatus next) {
